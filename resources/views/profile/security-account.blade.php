@@ -327,6 +327,15 @@
 					@endif
 				</div>
 
+				<div>
+					<label for="security_answer_confirmation" class="mb-2 block text-sm font-medium text-slate-700">Confirmar respuesta *</label>
+					<p data-error="security_answer_confirmation" class="mt-2 text-sm text-rose-600 hidden"></p>
+					<input id="security_answer_confirmation" name="security_answer_confirmation" type="text" autocomplete="off" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900" />
+					@if($translateValidation('security_answer_confirmation'))
+						<p class="mt-2 text-sm text-rose-600">{{ $translateValidation('security_answer_confirmation') }}</p>
+					@endif
+				</div>
+
 				<div class="mt-4">
 					<button type="button" data-change-question-close class="mb-3 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700">Cancelar</button>
 					<button type="submit" class="w-full rounded-full bg-[#0b67c2] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(11,103,194,0.20)]">Guardar</button>
@@ -537,6 +546,10 @@
 		openDeleteAccountModal();
 	@endif
 
+	@if ($errors->has('security_question') || $errors->has('security_answer') || $errors->has('security_answer_confirmation'))
+		openChangeQuestionModal();
+	@endif
+
 	// CSRF token for AJAX
 	const _csrf = '{{ csrf_token() }}';
 
@@ -572,7 +585,17 @@
 		changeQuestionForm.addEventListener('submit', (ev) => {
 			ev.preventDefault();
 			changeQuestionForm.querySelectorAll('[data-error]').forEach((el) => { el.textContent = ''; el.classList.add('hidden'); });
-			if (validateRequiredFields(changeQuestionForm, ['security_question', 'security_answer'])) {
+			if (validateRequiredFields(changeQuestionForm, ['security_question', 'security_answer', 'security_answer_confirmation'])) {
+				const answer = (changeQuestionForm.querySelector('#security_answer_new')?.value || '').trim();
+				const answerConfirmation = (changeQuestionForm.querySelector('#security_answer_confirmation')?.value || '').trim();
+				if (answer !== answerConfirmation) {
+					const errEl = changeQuestionForm.querySelector('[data-error="security_answer_confirmation"]');
+					if (errEl) {
+						errEl.textContent = 'Las respuestas no coinciden.';
+						errEl.classList.remove('hidden');
+					}
+					return;
+				}
 				changeQuestionForm.submit();
 			}
 		});

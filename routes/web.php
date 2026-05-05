@@ -7,8 +7,10 @@ use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\ValidateCode;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Caregiver\Dashboard as CaregiverDashboard;
 use App\Livewire\Dashboard;
 use App\Livewire\Profile\Dashboard as ProfileDashboard;
+use App\Support\RoleNames;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,9 +50,24 @@ Route::middleware('auth:web')->group(function () {
 });
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
-	Route::get('/dashboard', Dashboard::class)->name('dashboard');
+	Route::get('/dashboard', function () {
+		$user = Auth::user();
+		$role = $user?->getRoleNames()->first();
+
+		return match ($role) {
+			RoleNames::ADMIN => redirect()->route('admin.dashboard'),
+			RoleNames::DOCTOR => redirect()->route('doctor.dashboard'),
+			RoleNames::PHARMACIST => redirect()->route('pharmaceutical.dashboard'),
+			RoleNames::CAREGIVER => redirect()->route('caregiver.dashboard'),
+			default => redirect()->route('patient.dashboard'),
+		};
+	})->name('dashboard');
+	Route::get('/patient', Dashboard::class)->middleware('role:'.RoleNames::PATIENT.',web')->name('patient.dashboard');
+	Route::get('/caregiver', CaregiverDashboard::class)->middleware('role:'.RoleNames::CAREGIVER.',web')->name('caregiver.dashboard');
+	Route::get('/doctor', DoctorDashboard::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.dashboard');
+	Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.dashboard');
+	Route::get('/admin', AdminDashboard::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.dashboard');
 	Route::get('/profile', ProfileDashboard::class)->name('profile.dashboard');
-	Route::get('/admin', AdminDashboard::class)->name('admin.dashboard');
 
 	// Profile sub-pages
 	Route::view('/profile/information', 'profile.information-account')->name('profile.information');
@@ -182,8 +199,4 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
 		return back()->with('status', 'La pregunta de seguridad se actualizó correctamente.');
 	})->name('profile.security.question');
 
-		Route::middleware(['auth:web', 'verified'])->group(function () {
-			Route::get('/doctor', DoctorDashboard::class)->name('doctor.dashboard');
-			Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->name('pharmaceutical.dashboard');
-		});
 });

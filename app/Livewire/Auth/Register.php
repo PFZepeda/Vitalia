@@ -3,10 +3,12 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use App\Support\RoleNames;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 
 class Register extends Component
 {
@@ -127,6 +129,9 @@ class Register extends Component
             'sex' => $this->sex,
             'birth_date' => $this->birthDate,
         ]);
+
+        $patientRole = Role::findOrCreate(RoleNames::PATIENT, 'web');
+        $user->assignRole($patientRole);
 
         event(new Registered($user));
         Auth::guard('web')->login($user);
