@@ -1,5 +1,13 @@
 @php
 	$securityQuestion = auth()->user()?->security_question;
+	$securityQuestionOptions = [
+		'¿Cuál es el nombre de tu primera mascota?',
+		'¿En qué ciudad naciste?',
+		'¿Cuál es el nombre de tu padre o madre?',
+		'¿Cuál fue tu nombre de la escuela donde estudiaste?',
+		'¿Cuál es tu comida favorita?',
+	];
+	$selectedSecurityQuestion = $securityQuestion ?: ($securityQuestionOptions[0] ?? '');
 
 	$translateValidation = function($field) use ($errors) {
 		if (!$errors->has($field)) return null;
@@ -304,10 +312,9 @@
 					<label for="security_question" class="mb-2 block text-sm font-medium text-slate-700">Pregunta</label>
 					<p data-error="security_question" class="mt-2 text-sm text-rose-600 hidden"></p>
 					<select id="security_question" name="security_question" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900">
-						<option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
-						<option value="¿En qué ciudad naciste?">¿En qué ciudad naciste?</option>
-						<option value="¿Cuál es el nombre de tu mentor?">¿Cuál es el nombre de tu mentor?</option>
-						<option value="Otra">Otra</option>
+						@foreach ($securityQuestionOptions as $option)
+							<option value="{{ $option }}" @selected(($securityQuestion ?? $securityQuestionOptions[0]) === $option)>{{ $option }}</option>
+						@endforeach
 					</select>
 				</div>
 
@@ -317,15 +324,6 @@
 					<input id="security_answer_new" name="security_answer" type="text" autocomplete="off" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900" />
 					@if($translateValidation('security_answer'))
 						<p class="mt-2 text-sm text-rose-600">{{ $translateValidation('security_answer') }}</p>
-					@endif
-				</div>
-
-				<div>
-					<label for="security_answer_confirmation" class="mb-2 block text-sm font-medium text-slate-700">Confirmar respuesta *</label>
-					<p data-error="security_answer_confirmation" class="mt-2 text-sm text-rose-600 hidden"></p>
-					<input id="security_answer_confirmation" name="security_answer_confirmation" type="text" autocomplete="off" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900" />
-					@if($translateValidation('security_answer_confirmation'))
-						<p class="mt-2 text-sm text-rose-600">{{ $translateValidation('security_answer_confirmation') }}</p>
 					@endif
 				</div>
 
@@ -574,7 +572,7 @@
 		changeQuestionForm.addEventListener('submit', (ev) => {
 			ev.preventDefault();
 			changeQuestionForm.querySelectorAll('[data-error]').forEach((el) => { el.textContent = ''; el.classList.add('hidden'); });
-			if (validateRequiredFields(changeQuestionForm, ['security_question', 'security_answer', 'security_answer_confirmation'])) {
+			if (validateRequiredFields(changeQuestionForm, ['security_question', 'security_answer'])) {
 				changeQuestionForm.submit();
 			}
 		});

@@ -6,5 +6,4 @@
             echo $logo;
         @endphp
     </div>
-    <span class="text-[36px] font-bold tracking-[0.26em] text-[#2f7ac9]">VITALIA</span>
 </div>

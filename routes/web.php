@@ -6,6 +6,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\ValidateCode;
 use App\Livewire\Auth\VerifyEmail;
+use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Dashboard;
 use App\Livewire\Profile\Dashboard as ProfileDashboard;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Doctors\Dashboard as DoctorDashboard;
+use App\Livewire\Pharmaceutical\Dashboard as PharmaceuticalDashboard;
 
 
 Route::redirect('/', '/login');
@@ -48,6 +50,7 @@ Route::middleware('auth:web')->group(function () {
 Route::middleware(['auth:web', 'verified'])->group(function () {
 	Route::get('/dashboard', Dashboard::class)->name('dashboard');
 	Route::get('/profile', ProfileDashboard::class)->name('profile.dashboard');
+	Route::get('/admin', AdminDashboard::class)->name('admin.dashboard');
 
 	// Profile sub-pages
 	Route::view('/profile/information', 'profile.information-account')->name('profile.information');
@@ -159,18 +162,11 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
 		$validator = Validator::make($request->all(), [
 			'security_question' => ['required', 'string'],
 			'security_answer' => ['required', 'string'],
-			'security_answer_confirmation' => ['required', 'string'],
 		]);
 
 		$user = $request->user();
+		$question = (string) $request->input('security_question');
 		$answer = (string) $request->input('security_answer');
-		$answerConfirmation = (string) $request->input('security_answer_confirmation');
-
-		$validator->after(function ($validator) use ($answer, $answerConfirmation) {
-			if ($answer !== $answerConfirmation) {
-				$validator->errors()->add('security_answer_confirmation', 'Las respuestas no coinciden.');
-			}
-		});
 
 		$validator->validate();
 
@@ -179,14 +175,15 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
 		}
 
 		$user->forceFill([
-			'security_question' => (string) $request->input('security_question'),
+			'security_question' => $question,
 			'security_answer' => bcrypt($answer),
 		])->save();
 
 		return back()->with('status', 'La pregunta de seguridad se actualizó correctamente.');
 	})->name('profile.security.question');
 
-	Route::middleware(['auth:web', 'verified'])->group(function () {
-		Route::get('/doctor', DoctorDashboard::class)->name('doctor.dashboard');
-	});
+		Route::middleware(['auth:web', 'verified'])->group(function () {
+			Route::get('/doctor', DoctorDashboard::class)->name('doctor.dashboard');
+			Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->name('pharmaceutical.dashboard');
+		});
 });
