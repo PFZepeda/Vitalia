@@ -19,6 +19,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
     'phone',
     'phone_country_code',
     'phone_local',
+    'profile_photo_path',
     'security_question',
     'security_answer',
     'sex',

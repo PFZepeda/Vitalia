@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Doctors;
 
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -8,18 +8,19 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
-#[Title('Dashboard')]
+#[Title('Dashboard - Doctor')]
 class Dashboard extends Component
 {
-    public string $ownerName = 'Usuario';
+    public string $doctorName = 'Doctor';
 
     public function mount(): void
     {
-        $this->ownerName = Auth::user()?->name ?: 'Usuario';
+        $doctor = Auth::user();
+        $this->doctorName = $doctor?->name ?: 'Doctor';
     }
 
     public function render()
     {
-        return view('livewire.dashboard');
+        return view('livewire.doctors.dashboard');
     }
 }
