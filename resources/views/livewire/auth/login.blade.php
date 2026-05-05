@@ -45,7 +45,9 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <span class="text-[12px] font-semibold text-[#2f7ac9]">Olvidaste tu Contrasena?</span>
+                    <a href="{{ route('password.request') }}" class="text-[12px] font-semibold text-[#2f7ac9]">
+                        Olvidaste tu Contrasena?
+                    </a>
                 </div>
 
                 <button
@@ -61,6 +63,10 @@
 
             @if ($errors->has('form'))
                 <p class="mt-3 text-center text-[12px] text-red-600">{{ $errors->first('form') }}</p>
+            @endif
+
+            @if (session('status'))
+                <p class="mt-3 text-center text-[12px] text-emerald-600">{{ session('status') }}</p>
             @endif
 
             <div class="mt-4 text-center">
