@@ -63,12 +63,7 @@
 
                 <a href="#" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
                     <div class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2]">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10">
-                            <path d="M7 4H14L18 8V20H7V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                            <path d="M14 4V8H18" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                            <path d="M9 13H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                            <path d="M9 16H14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        </svg>
+                        <i class="fa-solid fa-clock-rotate-left text-[28px]"></i>
                     </div>
                     <div class="min-w-0 flex-1 text-left">
                         <h2 class="text-[18px] font-bold text-slate-950">Recordatorio del medico</h2>

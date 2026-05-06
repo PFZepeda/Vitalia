@@ -51,14 +51,7 @@
                     class="group flex items-center gap-4 rounded-2xl {{ $cardBg }} p-5 shadow-sm transition-all hover:shadow-md">
                     <div
                         class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg {{ $iconBg }} text-[#0b67c2] sm:h-18 sm:w-18">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
-                            <rect x="3" y="5" width="4" height="4" rx="0.75" fill="#0b67c2" />
-                            <rect x="3" y="11" width="4" height="4" rx="0.75" fill="#0b67c2" />
-                            <rect x="3" y="17" width="4" height="4" rx="0.75" fill="#0b67c2" />
-                            <path d="M9 7.5h10" stroke="#0b67c2" stroke-width="1.6" stroke-linecap="round" />
-                            <path d="M9 13.5h10" stroke="#0b67c2" stroke-width="1.6" stroke-linecap="round" />
-                            <path d="M9 19.5h10" stroke="#0b67c2" stroke-width="1.6" stroke-linecap="round" />
-                        </svg>
+                        <i class="fa-solid fa-list text-[28px]"></i>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h3 class="text-[18px] font-bold text-slate-900">Lista rápida de pacientes</h3>
@@ -77,11 +70,7 @@
                     class="group flex items-center gap-4 rounded-2xl {{ $cardBg }} p-5 shadow-sm transition-all hover:shadow-md">
                     <div
                         class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg {{ $iconBg }} text-[#0b67c2] sm:h-18 sm:w-18">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
-                            <circle cx="12" cy="9" r="3" fill="#0b67c2" />
-                            <path d="M4 20c0-3.866 3.582-7 8-7s8 3.134 8 7" stroke="#0b67c2" stroke-width="1.6"
-                                stroke-linecap="round" />
-                        </svg>
+                        <i class="fa-solid fa-user-plus text-[26px]"></i>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h3 class="text-[18px] font-bold text-slate-900">Gestión de pacientes</h3>

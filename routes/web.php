@@ -9,12 +9,17 @@ use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Caregiver\Dashboard as CaregiverDashboard;
 use App\Livewire\Dashboard;
+use App\Mail\CaregiverRequestCodeMail;
 use App\Livewire\Profile\Dashboard as ProfileDashboard;
+use App\Models\CaregiverRequestCode;
+use App\Models\CaregiverRequest;
+use App\Models\User;
 use App\Support\RoleNames;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Doctors\Dashboard as DoctorDashboard;
@@ -51,8 +56,12 @@ Route::middleware('auth:web')->group(function () {
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
 	Route::get('/dashboard', function () {
+		/** @var \App\Models\User|null $user */
 		$user = Auth::user();
-		$role = $user?->getRoleNames()->first();
+		if (! $user) {
+			return redirect()->route('login');
+		}
+		$role = $user->getRoleNames()->first();
 
 		return match ($role) {
 			RoleNames::ADMIN => redirect()->route('admin.dashboard'),
@@ -72,6 +81,156 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
 	// Profile sub-pages
 	Route::view('/profile/information', 'profile.information-account')->name('profile.information');
 	Route::view('/profile/security', 'profile.security-account')->name('profile.security');
+	// Professional data page
+	Route::view('/profile/professional-data', 'profile.professional-data')->name('profile.professional-data');
+	// View doctors page
+	Route::view('/profile/view-doctors', 'profile.view-doctors')->name('profile.view-doctors');
+	// View patients page
+	Route::view('/profile/view-patients', 'profile.view-patients')->name('profile.view-patients');
+	// View pharmacy page
+	Route::view('/profile/view-pharmacy', 'profile.view-pharmacy')->name('profile.view-pharmacy');
+	Route::view('/profile/be-patient', 'profile.be-patient')
+		->middleware('role:'.RoleNames::CAREGIVER.',web')
+		->name('profile.be-patient');
+	Route::post('/profile/be-patient', function (Request $request) {
+		$validator = Validator::make($request->all(), [
+			'password' => ['required', 'string'],
+		], [
+			'password.required' => 'La contraseña es obligatoria.',
+			'password.string' => 'La contraseña ingresada no es válida.',
+		]);
+
+		$user = $request->user();
+		$password = (string) $request->input('password');
+
+		$validator->after(function ($validator) use ($user, $password) {
+			if (! $user || ! Hash::check($password, $user->password)) {
+				$validator->errors()->add('password', 'La contraseña ingresada no coincide con la de tu cuenta.');
+			}
+		});
+
+		if ($validator->fails()) {
+			return back()->withErrors($validator)->with('open_be_patient_modal', true);
+		}
+
+		if (! $user) {
+			abort(403);
+		}
+
+		$user->syncRoles([RoleNames::PATIENT]);
+
+		return redirect()->route('patient.dashboard')->with('status', 'Ahora eres paciente nuevamente.');
+	})->middleware('role:'.RoleNames::CAREGIVER.',web')->name('profile.be-patient.confirm');
+	Route::view('/profile/be-caregiver', 'profile.be-caregiver')
+		->middleware('role:'.RoleNames::PATIENT.',web')
+		->name('profile.be-caregiver');
+	Route::post('/profile/be-caregiver', function (Request $request) {
+		$validator = Validator::make($request->all(), [
+			'patient_email' => ['required', 'email'],
+		]);
+
+		$patient = null;
+		$validator->after(function ($validator) use ($request, &$patient) {
+			$email = strtolower(trim((string) $request->input('patient_email')));
+			$patient = User::query()->where('email', $email)->first();
+			if (! $patient || ! $patient->hasRole(RoleNames::PATIENT)) {
+				$validator->errors()->add('patient_email', 'Correo de paciente no encontrado');
+				return;
+			}
+
+			if ($request->user() && $patient->id === $request->user()->id) {
+				$validator->errors()->add('patient_email', 'No puedes enviarte una solicitud a ti mismo.');
+			}
+		});
+
+		$validator->validate();
+		if (! $patient) {
+			return back()->withErrors([
+				'patient_email' => 'Correo de paciente no encontrado',
+			]);
+		}
+		/** @var \App\Models\User $patient */
+
+		/** @var \App\Models\User $caregiver */
+		$caregiver = $request->user();
+		$code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+		CaregiverRequestCode::updateOrCreate(
+			[
+				'caregiver_id' => $caregiver->id,
+				'patient_id' => $patient->id,
+			],
+			[
+				'email' => $patient->email,
+				'code_hash' => Hash::make($code),
+				'expires_at' => now()->addMinutes(30),
+				'last_sent_at' => now(),
+			]
+		);
+
+		Mail::to($patient->email)->send(new CaregiverRequestCodeMail($code));
+
+		session([
+			'caregiver_request_resend_available_at' => now()->addSeconds(30)->timestamp,
+			'caregiver_request_patient_id' => $patient->id,
+			'caregiver_request_patient_email' => $patient->email,
+		]);
+
+		return back()
+			->with('status', 'Se envió el codigo al correo del paciente.')
+			->with('open_caregiver_code_modal', true);
+	})->middleware('role:'.RoleNames::PATIENT.',web')->name('profile.be-caregiver.request');
+
+Route::post('/profile/be-caregiver/verify', function (Request $request) {
+	$validator = Validator::make($request->all(), [
+		'code' => ['required', 'string', 'size:6'],
+	]);
+
+	$validator->validate();
+
+	$caregiver = $request->user();
+	$patientId = (int) session('caregiver_request_patient_id', 0);
+
+	if (! $patientId) {
+		return back()->withErrors(['code' => 'No hay una solicitud pendiente.'])->with('open_caregiver_code_modal', true);
+	}
+
+	$record = CaregiverRequestCode::query()
+		->where('caregiver_id', $caregiver->id)
+		->where('patient_id', $patientId)
+		->first();
+
+	if (! $record || $record->expires_at->isPast()) {
+		return back()->withErrors(['code' => 'Código no encontrado o expirado.'])->with('open_caregiver_code_modal', true);
+	}
+
+	if (! Hash::check($request->input('code'), $record->code_hash)) {
+		return back()->withErrors(['code' => 'Código inválido.'])->with('open_caregiver_code_modal', true);
+	}
+
+	// Create or get the caregiver request and mark it as accepted because the patient confirmed
+	$requestRecord = CaregiverRequest::firstOrCreate([
+		'caregiver_id' => $caregiver->id,
+		'patient_id' => $patientId,
+	], ['status' => CaregiverRequest::STATUS_PENDING]);
+
+	$requestRecord->status = CaregiverRequest::STATUS_ACCEPTED;
+	$requestRecord->save();
+
+	// remove code record
+	$record->delete();
+
+	// get patient email for friendly message
+	$patientEmail = session('caregiver_request_patient_email') ?? optional(User::find($patientId))->email ?? 'el paciente';
+
+	// Assign caregiver role to the current user
+	$caregiver->syncRoles([RoleNames::CAREGIVER]);
+
+	// clear session helper values
+	session()->forget(['caregiver_request_resend_available_at', 'caregiver_request_patient_id', 'caregiver_request_patient_email', 'open_caregiver_code_modal']);
+
+	return redirect()->route('caregiver.dashboard')->with('status', "Te has vuelto cuidador de {$patientEmail} exitosamente");
+})->middleware('role:'.RoleNames::PATIENT.',web')->name('profile.be-caregiver.verify');
 	Route::post('/profile/security/password', function (Request $request) {
 		$validator = Validator::make($request->all(), [
 			'new_password' => ['required', 'string', 'min:8'],

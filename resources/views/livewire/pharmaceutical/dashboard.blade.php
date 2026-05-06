@@ -11,43 +11,35 @@
             </header>
 
             <main class="space-y-6 mb-24"> <!-- add bottom margin so content isn't hidden behind fixed nav -->
-                <a href="#" class="block bg-gray-100 hover:bg-gray-200 transition rounded-2xl p-4 sm:p-6 flex items-center justify-between">
+                <a href="#" class="group rounded-2xl bg-[#eef2f4] p-4 sm:p-6 flex items-center justify-between shadow-sm transition-all hover:bg-[#e3e9ee] hover:shadow-md">
                     <div class="flex items-center gap-4">
-                        <div class="bg-white/60 rounded-lg p-3 shadow-sm">
-                            <!-- Magnifier icon -->
-                            <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z" />
-                            </svg>
+                        <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#e6eef6] text-[#0b67c2] shadow-[inset_0_0_0_1px_rgba(11,103,194,0.08)] p-4">
+                            <i class="fa-solid fa-magnifying-glass text-[26px] leading-none transition-transform group-hover:-translate-y-0.5"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900">Buscador de medicamentos</h2>
-                            <p class="text-sm text-gray-400">Buscar medicamentos por sustancia o nombre comercial.</p>
+                            <h2 class="text-lg font-semibold text-slate-900">Buscador de medicamentos</h2>
+                            <p class="text-sm text-slate-500">Buscar medicamentos por sustancia o nombre comercial.</p>
                         </div>
                     </div>
                     <div>
-                        <svg class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <svg class="h-6 w-6 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-[#0b67c2]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
                     </div>
                 </a>
 
-                <a href="#" class="block bg-gray-100 hover:bg-gray-200 transition rounded-2xl p-4 sm:p-6 flex items-center justify-between">
+                <a href="#" class="group rounded-2xl bg-[#eef2f4] p-4 sm:p-6 flex items-center justify-between shadow-sm transition-all hover:bg-[#e3e9ee] hover:shadow-md">
                     <div class="flex items-center gap-4">
-                        <div class="bg-white/60 rounded-lg p-3 shadow-sm">
-                            <!-- Pills icon -->
-                            <svg class="h-8 w-8 text-blue-600" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M12 3a3 3 0 00-3 3v1h6V6a3 3 0 00-3-3z" opacity=".9" />
-                                <path d="M9 8v7a3 3 0 006 0V8H9z" opacity=".8" />
-                                <path d="M5 11a2 2 0 00-2 2v3a4 4 0 004 4h10a4 4 0 004-4v-3a2 2 0 00-2-2H5z" opacity=".6" />
-                            </svg>
+                        <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#e6eef6] text-[#0b67c2] shadow-[inset_0_0_0_1px_rgba(11,103,194,0.08)] p-4">
+                            <i class="fa-solid fa-capsules text-[26px] leading-none transition-transform group-hover:-translate-y-0.5"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900">Gestión de medicamentos</h2>
-                            <p class="text-sm text-gray-400">Agrega, edita y elimina medicamentos, incluyendo el inventario</p>
+                            <h2 class="text-lg font-semibold text-slate-900">Gestión de medicamentos</h2>
+                            <p class="text-sm text-slate-500">Agrega, edita y elimina medicamentos, incluyendo el inventario</p>
                         </div>
                     </div>
                     <div>
-                        <svg class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <svg class="h-6 w-6 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-[#0b67c2]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
                     </div>

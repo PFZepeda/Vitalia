@@ -18,8 +18,8 @@
 
     $icon = function (string $type): string {
         return match ($type) {
-            'users' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-9 w-9"><circle cx="8" cy="8" r="2.4" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="8" r="2.4" stroke="currentColor" stroke-width="2"/><path d="M4.5 18c.6-2.6 2.8-4.5 5.5-4.5s4.9 1.9 5.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 18c.5-2.1 2.2-3.6 4.3-3.6 2 0 3.6 1.3 4.2 3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="2.2" stroke="currentColor" stroke-width="2"/></svg>',
-            'document-check' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-9 w-9"><path d="M7 3.75h6.5L18.5 8.75V20.25H7V3.75Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.5 3.75v5h5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.25 14h3.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 17h2.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.5 16.5l1.2 1.2 2.3-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16.5" cy="17" r="3.25" stroke="currentColor" stroke-width="2"/></svg>',
+            'users' => '<i class="fa-solid fa-users text-[28px]" ></i>',
+            'document-check' => '<i class="fa-solid fa-file-circle-exclamation text-[28px]"></i>',
             default => '',
         };
     };
