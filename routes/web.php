@@ -54,7 +54,7 @@ Route::middleware('auth:web')->group(function () {
 	})->name('logout');
 });
 
-Route::middleware(['auth:web', 'verified'])->group(function () {
+Route::middleware(['auth:web', 'verified', 'single_session'])->group(function () {
 	Route::get('/dashboard', function () {
 		/** @var \App\Models\User|null $user */
 		$user = Auth::user();

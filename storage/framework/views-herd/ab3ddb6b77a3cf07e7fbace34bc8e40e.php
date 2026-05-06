@@ -1,0 +1,1 @@
+<?php /**PATH C:\Users\pablo\vitalia-api\resources\views/profile/view-doctors.blade.php ENDPATH**/ ?>
