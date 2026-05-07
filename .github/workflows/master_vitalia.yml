@@ -53,7 +53,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: php-app
-          path: .
+          path: |
+            .
+            !node_modules
+            !.git
+            !storage/framework/views-herd/*
 
   deploy:
     runs-on: ubuntu-latest
