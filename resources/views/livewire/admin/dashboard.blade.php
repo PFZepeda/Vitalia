@@ -6,7 +6,7 @@
             'title' => 'Gestion de usuarios',
             'description' => 'Revisa medicos y farmaceuticos recien registrados y valida su cedula profesional para activar la cuenta.',
             'icon' => 'users',
-            'href' => '#',
+            'href' => route('admin.users.index'),
         ],
         [
             'title' => 'Bandeja de validacion',

@@ -36,7 +36,7 @@
                         type="text"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="Tu nombre"
-                        wire:model.defer="name"
+                        wire:model="name"
                         autocomplete="name"
                     />
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['name'];
@@ -57,7 +57,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         type="email"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="correo@ejemplo.com"
-                        wire:model.defer="email"
+                        wire:model="email"
                         autocomplete="email"
                     />
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['email'];
@@ -87,7 +87,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             type="tel"
                             class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                             placeholder="(000) 000-0000"
-                            wire:model.defer="phoneLocal"
+                            wire:model="phoneLocal"
                             autocomplete="tel"
                         />
                     </div>
@@ -132,7 +132,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         type="text"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="Escribe tu respuesta"
-                        wire:model.defer="securityAnswer"
+                        wire:model="securityAnswer"
                     />
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['securityAnswer'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -174,7 +174,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         <input
                             type="date"
                             class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900"
-                            wire:model.defer="birthDate"
+                            wire:model="birthDate"
                         />
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['birthDate'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -196,7 +196,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             type="<?php echo e($passwordVisible ? 'text' : 'password'); ?>"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="********"
-                            wire:model.defer="password"
+                            wire:model="password"
                             autocomplete="new-password"
                         />
                         <button
@@ -227,7 +227,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             type="<?php echo e($confirmPasswordVisible ? 'text' : 'password'); ?>"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="********"
-                            wire:model.defer="password_confirmation"
+                            wire:model="password_confirmation"
                             autocomplete="new-password"
                         />
                         <button

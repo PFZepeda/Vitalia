@@ -17,7 +17,7 @@
                         maxlength="6"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="Ingresa tu codigo"
-                        wire:model.defer="code"
+                        wire:model="code"
                     />
                     @error('code')
                         <p class="mt-1 text-[12px] text-red-600">{{ $message }}</p>

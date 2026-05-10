@@ -34,7 +34,7 @@
                         type="email"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="correo@ejemplo.com"
-                        wire:model.defer="email"
+                        wire:model="email"
                         autocomplete="email"
                     />
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['email'];
@@ -56,7 +56,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             type="<?php echo e($passwordVisible ? 'text' : 'password'); ?>"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="********"
-                            wire:model.defer="password"
+                            wire:model="password"
                             autocomplete="current-password"
                         />
                         <button

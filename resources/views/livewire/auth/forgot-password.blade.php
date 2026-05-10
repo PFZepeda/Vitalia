@@ -13,7 +13,7 @@
                         type="email"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="correo@ejemplo.com"
-                        wire:model.defer="email"
+                        wire:model="email"
                         autocomplete="email"
                     />
                     @error('email')

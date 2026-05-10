@@ -15,7 +15,7 @@
                         type="text"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="Tu nombre"
-                        wire:model.defer="name"
+                        wire:model="name"
                         autocomplete="name"
                     />
                     @error('name')
@@ -29,7 +29,7 @@
                         type="email"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="correo@ejemplo.com"
-                        wire:model.defer="email"
+                        wire:model="email"
                         autocomplete="email"
                     />
                     @error('email')
@@ -52,7 +52,7 @@
                             type="tel"
                             class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                             placeholder="(000) 000-0000"
-                            wire:model.defer="phoneLocal"
+                            wire:model="phoneLocal"
                             autocomplete="tel"
                         />
                     </div>
@@ -83,7 +83,7 @@
                         type="text"
                         class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400"
                         placeholder="Escribe tu respuesta"
-                        wire:model.defer="securityAnswer"
+                        wire:model="securityAnswer"
                     />
                     @error('securityAnswer')
                         <p class="mt-1 text-[12px] text-red-600">{{ $message }}</p>
@@ -111,7 +111,7 @@
                         <input
                             type="date"
                             class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900"
-                            wire:model.defer="birthDate"
+                            wire:model="birthDate"
                         />
                         @error('birthDate')
                             <p class="mt-1 text-[12px] text-red-600">{{ $message }}</p>
@@ -126,7 +126,7 @@
                             type="{{ $passwordVisible ? 'text' : 'password' }}"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="********"
-                            wire:model.defer="password"
+                            wire:model="password"
                             autocomplete="new-password"
                         />
                         <button
@@ -149,7 +149,7 @@
                             type="{{ $confirmPasswordVisible ? 'text' : 'password' }}"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="********"
-                            wire:model.defer="password_confirmation"
+                            wire:model="password_confirmation"
                             autocomplete="new-password"
                         />
                         <button

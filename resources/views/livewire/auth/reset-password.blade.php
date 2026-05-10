@@ -13,7 +13,7 @@
                             type="{{ $passwordVisible ? 'text' : 'password' }}"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="Al menos 8 caracteres"
-                            wire:model.defer="password"
+                            wire:model="password"
                             autocomplete="new-password"
                         />
                         <button
@@ -36,7 +36,7 @@
                             type="{{ $confirmPasswordVisible ? 'text' : 'password' }}"
                             class="w-full flex-1 bg-transparent px-3 py-2 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                             placeholder="Al menos 8 caracteres"
-                            wire:model.defer="password_confirmation"
+                            wire:model="password_confirmation"
                             autocomplete="new-password"
                         />
                         <button

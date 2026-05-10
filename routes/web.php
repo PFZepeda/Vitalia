@@ -76,6 +76,8 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 	Route::get('/doctor', DoctorDashboard::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.dashboard');
 	Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.dashboard');
 	Route::get('/admin', AdminDashboard::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.dashboard');
+	Route::get('/admin/users', \App\Livewire\Admin\UserManagement::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.users.index');
+	Route::get('/admin/users/{user}/edit', \App\Livewire\Admin\UserEdit::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.users.edit');
 	Route::get('/profile', ProfileDashboard::class)->name('profile.dashboard');
 
 	// Profile sub-pages

@@ -36,7 +36,7 @@ class Login extends Component
             'password' => $this->password,
         ])) {
             throw ValidationException::withMessages([
-                'email' => 'Credenciales inválidas.',
+                'form' => 'Credenciales inválidas.',
             ]);
         }
 
