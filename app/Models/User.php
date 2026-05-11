@@ -24,6 +24,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
     'security_answer',
     'sex',
     'birth_date',
+    'height',
+    'weight',
 ])]
 #[Hidden(['password', 'remember_token', 'security_answer'])]
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail

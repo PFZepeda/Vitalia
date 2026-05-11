@@ -47,7 +47,7 @@
                 </a>
 
                 <!-- Lista Rápida de Pacientes -->
-                <a href="#"
+                <a href="{{ route('doctor.my-patients.index') }}"
                     class="group flex items-center gap-4 rounded-2xl {{ $cardBg }} p-5 shadow-sm transition-all hover:shadow-md">
                     <div
                         class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg {{ $iconBg }} text-[#0b67c2] sm:h-18 sm:w-18">
@@ -66,7 +66,7 @@
                 </a>
 
                 <!-- Gestión de Pacientes -->
-                <a href="#"
+                <a href="{{ route('doctor.patients.index') }}"
                     class="group flex items-center gap-4 rounded-2xl {{ $cardBg }} p-5 shadow-sm transition-all hover:shadow-md">
                     <div
                         class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg {{ $iconBg }} text-[#0b67c2] sm:h-18 sm:w-18">

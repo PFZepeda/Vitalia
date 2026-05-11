@@ -74,6 +74,9 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 	Route::get('/patient', Dashboard::class)->middleware('role:'.RoleNames::PATIENT.',web')->name('patient.dashboard');
 	Route::get('/caregiver', CaregiverDashboard::class)->middleware('role:'.RoleNames::CAREGIVER.',web')->name('caregiver.dashboard');
 	Route::get('/doctor', DoctorDashboard::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.dashboard');
+	Route::get('/doctor/patients', \App\Livewire\Doctors\PatientManagement::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.patients.index');
+	Route::get('/doctor/my-patients', \App\Livewire\Doctors\MyPatients::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.my-patients.index');
+	Route::get('/doctor/patients/{user}', \App\Livewire\Doctors\PatientInfo::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.patients.show');
 	Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.dashboard');
 	Route::get('/admin', AdminDashboard::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.dashboard');
 	Route::get('/admin/users', \App\Livewire\Admin\UserManagement::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.users.index');

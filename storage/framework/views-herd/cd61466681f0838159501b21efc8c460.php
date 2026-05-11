@@ -61,7 +61,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         />
                         <button
                             type="button"
-                            class="px-3 py-2 text-[12px] font-semibold text-[#2f7ac9]"
+                            class="cursor-pointer px-3 py-2 text-[12px] font-semibold text-[#2f7ac9]"
                             wire:click="togglePasswordVisibility"
                         >
                             <?php echo e($passwordVisible ? 'Ocultar' : 'Mostrar'); ?>
