@@ -1,43 +1,262 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
+<div class="mb-6" style="padding: 0 8px;">
     <div class="flex flex-col items-center">
         <x-vitalia-logo class="scale-[0.58] sm:scale-[0.66]" />
     </div>
 
-    <div class="flex items-center gap-2">
-        <a href="{{ route('profile.dashboard') }}" class="text-slate-900">
+    <div class="flex items-center gap-2 px-2" style="min-height: 40px;">
+        <a href="{{ route('profile.dashboard') }}" class="text-slate-900 flex-shrink-0">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6">
                 <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg>
         </a>
-        <h1 class="text-[22px] font-bold text-slate-900">Validar de Cédulas</h1>
+        <h1 class="text-[18px] sm:text-[22px] font-bold text-slate-900 truncate">Validar de Cédulas</h1>
     </div>
 
 <style>
-  .prof-container{max-width:420px;margin:18px auto;padding:20px;background:#fff;border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,0.06);font-family:Arial,Helvetica,sans-serif}
-  .prof-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  .prof-header img{height:38px}
-  .title{font-size:20px;font-weight:700}
-  .muted{color:#6b7280;font-size:13px}
-  .drop-area{border:1px dashed #e5e7eb;border-radius:8px;padding:22px;text-align:center;background:#f8fafc;color:#6b7280}
-  .drop-area.dragover{border-color:#2563eb;background:#eef6ff}
-  .file-name{margin-top:8px;color:#111827;font-size:14px}
-  .help-text{font-size:13px;color:#ef4444;margin-top:6px}
-  .input-inline{margin-top:14px}
-  .text-input{width:100%;padding:10px;border-radius:8px;border:1px solid #e5e7eb}
-  .btn-primary{display:block;width:100%;background:#0b5ed7;color:#fff;padding:12px;border-radius:10px;border:none;margin-top:16px;font-weight:700;box-shadow:0 4px 10px rgba(11,94,215,0.12)}
-  .btn-primary[disabled]{background:#94a3b8;color:#fff;cursor:not-allowed;box-shadow:none}
-  .text-input[disabled], .text-input[readonly]{background:#f1f5f9;color:#475569}
-  .drop-area.disabled{background:#fbfdff;border-color:#cbd5e1;color:#64748b}
-  .status-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:600;color:#fff}
-  .status-pendiente{background:#f59e0b}
-  .status-aceptado{background:#10b981}
-  .status-rechazado{background:#ef4444}
-  .status-row{margin-top:14px}
-  @media (max-width:480px){body{background:#f3f4f6;padding:8px}}
+  * { box-sizing: border-box; }
+  
+  body {
+    background: #f3f4f6;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .prof-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 12px auto;
+    padding: 16px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 100px;
+  }
+
+  .prof-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .prof-header img {
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .muted {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .drop-area {
+    border: 1px dashed #e5e7eb;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    background: #f8fafc;
+    color: #6b7280;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .drop-area:focus {
+    outline: 2px solid #0b5ed7;
+    outline-offset: 2px;
+  }
+
+  .drop-area.dragover {
+    border-color: #2563eb;
+    background: #eef6ff;
+  }
+
+  .file-name {
+    margin-top: 8px;
+    color: #111827;
+    font-size: 13px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .help-text {
+    font-size: 13px;
+    color: #ef4444;
+    margin-top: 6px;
+  }
+
+  .input-inline {
+    margin-top: 16px;
+  }
+
+  .input-inline label {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .text-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 16px;
+    font-family: inherit;
+  }
+
+  .text-input:focus {
+    outline: none;
+    border-color: #0b5ed7;
+    background: #fff;
+  }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: #0b5ed7;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(11,94,215,0.12);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:active {
+    background: #0a47b8;
+    transform: scale(0.98);
+  }
+
+  .btn-primary[disabled] {
+    background: #94a3b8;
+    color: #fff;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  .text-input[disabled],
+  .text-input[readonly] {
+    background: #f1f5f9;
+    color: #475569;
+    cursor: not-allowed;
+  }
+
+  .drop-area.disabled {
+    background: #fbfdff;
+    border-color: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .status-pill {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    color: #fff;
+    font-size: 12px;
+  }
+
+  .status-pendiente {
+    background: #f59e0b;
+  }
+
+  .status-aceptado {
+    background: #10b981;
+  }
+
+  .status-rechazado {
+    background: #ef4444;
+  }
+
+  .status-row {
+    margin-top: 16px;
+  }
+
+  #statusReason {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  #viewDocumentLink {
+    color: #0b5ed7;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  #viewDocumentLink:active {
+    opacity: 0.8;
+  }
+
+  @media (min-width: 480px) {
+    .prof-container {
+      max-width: 420px;
+      margin: 24px auto;
+      padding: 24px;
+    }
+
+    .prof-header {
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-size: 20px;
+    }
+
+    .drop-area {
+      padding: 24px;
+      margin-top: 12px;
+    }
+
+    .input-inline {
+      margin-top: 18px;
+    }
+
+    .btn-primary {
+      margin-top: 24px;
+      padding: 14px 20px;
+      font-size: 16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .prof-container {
+      max-width: 480px;
+      padding: 32px;
+      padding-bottom: 40px;
+    }
+
+    .prof-header {
+      margin-bottom: 24px;
+    }
+
+    .drop-area {
+      padding: 28px;
+    }
+  }
 </style>
 
 <div class="prof-container">
@@ -261,5 +480,7 @@
 
 })();
 </script>
+
+<x-vitalia-bottom-nav active="home" />
 
 @endsection

@@ -16,24 +16,26 @@
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 16px;
+    align-items: flex-start;
+    padding: 12px 8px;
+    padding-top: 16px;
+    padding-bottom: 120px;
   }
 
   .card-container {
     background: #fff;
-    border-radius: 20px;
-    padding: 24px 20px;
+    border-radius: 16px;
+    padding: 16px;
     width: 100%;
-    max-width: 420px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   .header-back {
     display: flex;
     align-items: center;
-    margin-bottom: 24px;
-    gap: 12px;
+    margin-bottom: 16px;
+    gap: 8px;
   }
 
   .back-btn {
@@ -48,6 +50,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
 
   .back-btn:active {
@@ -55,26 +58,33 @@
   }
 
   .header-title {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
     color: #1a202c;
     margin: 0;
     flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .logo-section {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   .logo {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 8px;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 6px;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .logo-text {
-    font-size: 14px;
+    font-size: 12px;
     color: #3b82f6;
     font-weight: 600;
     letter-spacing: 1px;
@@ -84,81 +94,86 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   .user-avatar {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: #dbeafe;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     color: #3b82f6;
     flex-shrink: 0;
   }
 
   .user-details h3 {
-    margin: 0 0 4px 0;
-    font-size: 16px;
+    margin: 0 0 2px 0;
+    font-size: 14px;
     color: #1a202c;
     font-weight: 600;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .user-details p {
     margin: 0;
-    font-size: 13px;
+    font-size: 12px;
     color: #64748b;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .section {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   .section-label {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     color: #3b82f6;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .section-content {
     background: #f8fafc;
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 12px;
   }
 
   .section-value {
-    font-size: 14px;
+    font-size: 13px;
     color: #1a202c;
     font-weight: 500;
     word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .file-section {
     background: #f8fafc;
-    border-radius: 12px;
-    padding: 32px 16px;
+    border-radius: 10px;
+    padding: 20px 12px;
     text-align: center;
   }
 
   .file-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
+    font-size: 40px;
+    margin-bottom: 10px;
   }
 
   .file-btn {
-    padding: 10px 24px;
+    padding: 9px 20px;
     background: #3b82f6;
     color: #fff;
     border: none;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
@@ -166,21 +181,23 @@
 
   .file-btn:active {
     background: #2563eb;
+    transform: scale(0.98);
   }
 
   .textarea-section {
     position: relative;
+    margin-bottom: 16px;
   }
 
   .reason-textarea {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     font-size: 14px;
     font-family: inherit;
     resize: vertical;
-    min-height: 100px;
+    min-height: 80px;
     background: #f8fafc;
   }
 
@@ -191,27 +208,31 @@
   }
 
   .char-count {
-    font-size: 12px;
+    font-size: 11px;
     color: #94a3b8;
-    margin-top: 4px;
+    margin-top: 3px;
     text-align: right;
   }
 
   .actions-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 24px;
+    gap: 10px;
+    margin-top: 16px;
   }
 
   .btn-action {
-    padding: 12px 16px;
+    padding: 11px 12px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .btn-accept {
@@ -239,7 +260,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 60vh;
     gap: 12px;
   }
 
@@ -261,31 +282,31 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    gap: 16px;
+    min-height: 60vh;
+    gap: 12px;
     text-align: center;
     padding: 20px;
   }
 
   .error-icon {
-    font-size: 64px;
+    font-size: 48px;
   }
 
   .error-text {
-    font-size: 18px;
+    font-size: 16px;
     color: #1a202c;
     font-weight: 600;
   }
 
   .error-description {
-    font-size: 14px;
+    font-size: 13px;
     color: #64748b;
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
   .btn-back-error {
-    margin-top: 16px;
-    padding: 12px 32px;
+    margin-top: 12px;
+    padding: 11px 20px;
     background: #3b82f6;
     color: #fff;
     border: none;
@@ -299,14 +320,65 @@
     background: #2563eb;
   }
 
+  @media (min-width: 480px) {
+    .container-main {
+      padding: 16px;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    .card-container {
+      max-width: 420px;
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    .header-title {
+      font-size: 18px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      font-size: 36px;
+    }
+
+    .logo-text {
+      font-size: 14px;
+    }
+
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+    }
+
+    .user-details h3 {
+      font-size: 16px;
+    }
+
+    .file-section {
+      padding: 28px 16px;
+    }
+
+    .file-icon {
+      font-size: 48px;
+    }
+
+    .btn-action {
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+  }
+
   @media (min-width: 768px) {
+    .container-main {
+      padding: 24px;
+    }
+
     .card-container {
       max-width: 480px;
       padding: 32px 28px;
-    }
-
-    .container-main {
-      padding: 24px;
     }
   }
 </style>
@@ -476,5 +548,7 @@
   };
 })();
 </script>
+
+<x-vitalia-bottom-nav active="home" />
 
 @endsection
