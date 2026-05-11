@@ -85,6 +85,35 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 	Route::view('/profile/security', 'profile.security-account')->name('profile.security');
 	// Professional data page
 	Route::view('/profile/professional-data', 'profile.professional-data')->name('profile.professional-data');
+
+	// Professional documents API
+	Route::get('/profile/professional-data/status', [\App\Http\Controllers\ProfessionalDocumentController::class, 'status'])->name('profile.professional.status');
+	Route::post('/profile/professional-data/upload', [\App\Http\Controllers\ProfessionalDocumentController::class, 'store'])->name('profile.professional.upload');
+
+	// Admin: validate a professional document request (accept/reject)
+	Route::post('/admin/profile/professional/{id}/validate', [\App\Http\Controllers\ProfessionalDocumentController::class, 'validateRequest'])
+		->middleware('role:'.RoleNames::ADMIN.',web')
+		->name('admin.profile.professional.validate');
+	// Admin: list professional document requests (JSON)
+	Route::get('/admin/profile/professional/list', [\App\Http\Controllers\ProfessionalDocumentController::class, 'index'])
+		->middleware('role:'.RoleNames::ADMIN.',web')
+		->name('admin.profile.professional.list');
+
+	// Admin: page to validate professional documents
+	Route::view('/admin/validate-professional-data', 'livewire.admin.validate-professional-data')
+		->middleware('role:'.RoleNames::ADMIN.',web')
+		->name('admin.validate-professional-data');
+	
+	// Admin: get professional detail (show)
+	Route::get('/admin/profile/professional/{id}', [\App\Http\Controllers\ProfessionalDocumentController::class, 'show'])
+		->middleware('role:'.RoleNames::ADMIN.',web')
+		->name('admin.profile.professional.show');
+	
+	// Admin: page to view and validate a professional document
+	Route::view('/admin/view-professional-data', 'livewire.admin.view-professional-data')
+		->middleware('role:'.RoleNames::ADMIN.',web')
+		->name('admin.view-professional-data');
+	
 	// View doctors page
 	Route::view('/profile/view-doctors', 'profile.view-doctors')->name('profile.view-doctors');
 	// View patients page

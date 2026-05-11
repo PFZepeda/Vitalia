@@ -131,7 +131,7 @@
                         />
                         <button
                             type="button"
-                            class="px-3 py-2 text-[12px] font-semibold text-[#2f7ac9]"
+                            class=" cursor-pointer px-3 py-2 text-[12px] font-semibold text-[#2f7ac9]"
                             wire:click="togglePasswordVisibility"
                         >
                             {{ $passwordVisible ? 'Ocultar' : 'Mostrar' }}
@@ -154,7 +154,7 @@
                         />
                         <button
                             type="button"
-                            class="px-3 py-2 text-[12px] font-semibold text-[#2f7ac9]"
+                            class=" cursor-pointer px-3 py-2 text-[12px] font-semibold text-[#2f7ac9]"
                             wire:click="toggleConfirmPasswordVisibility"
                         >
                             {{ $confirmPasswordVisible ? 'Ocultar' : 'Mostrar' }}

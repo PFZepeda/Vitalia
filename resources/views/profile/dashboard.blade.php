@@ -194,24 +194,6 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-
-                    <a href="{{ route('profile.view-patients') }}"
-                        class="flex h-full items-center gap-4 rounded-3xl bg-white px-4 py-4 shadow-[0_6px_20px_rgba(15,23,42,0.05)] transition-transform hover:scale-[1.01] sm:px-5">
-                        <div
-                            class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2] sm:h-20 sm:w-24">
-                            <i class="fa-solid fa-user-injured text-[40px]" aria-hidden="true"></i>
-                        </div>
-                        <div class="min-w-0 flex-1 text-left">
-                            <h2 class="text-[16px] font-bold text-slate-950 sm:text-[18px]">Pacientes</h2>
-                            <p class="mt-1 text-[13px] leading-5 text-slate-400 sm:text-[15px]">Revisa la informacion
-                                de tus pacientes asignados.</p>
-                        </div>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                            class="h-8 w-8 shrink-0 text-slate-950 sm:h-9 sm:w-9">
-                            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
                 @endif
 
                 @if ($isPharmacist)
@@ -237,36 +219,6 @@
                             <h2 class="text-[16px] font-bold text-slate-950 sm:text-[18px]">Perfil Profesional</h2>
                             <p class="mt-1 text-[13px] leading-5 text-slate-400 sm:text-[15px]">Administra tus datos
                                 profesionales.</p>
-                        </div>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                            class="h-8 w-8 shrink-0 text-slate-950 sm:h-9 sm:w-9">
-                            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-
-                    <a href="{{ route('profile.view-pharmacy') }}"
-                        class="flex h-full items-center gap-4 rounded-3xl bg-white px-4 py-4 shadow-[0_6px_20px_rgba(15,23,42,0.05)] transition-transform hover:scale-[1.01] sm:px-5">
-                        <div
-                            class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2] sm:h-20 sm:w-24">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="h-10 w-10">
-                                <path d="M4 9L6.2 4H17.8L20 9" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path
-                                    d="M4 9C5 10.5 6.6 11 8 11C9.4 11 11 10.5 12 9C13 10.5 14.6 11 16 11C17.4 11 19 10.5 20 9"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M5 11V19H19V11" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M9 19V14H15V19" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="min-w-0 flex-1 text-left">
-                            <h2 class="text-[16px] font-bold text-slate-950 sm:text-[18px]">Establecimiento</h2>
-                            <p class="mt-1 text-[13px] leading-5 text-slate-400 sm:text-[15px]">Gestiona medicamentos y
-                                supervisa su existencia.</p>
                         </div>
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                             class="h-8 w-8 shrink-0 text-slate-950 sm:h-9 sm:w-9">

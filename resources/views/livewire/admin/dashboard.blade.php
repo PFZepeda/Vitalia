@@ -12,7 +12,7 @@
             'title' => 'Bandeja de validacion',
             'description' => 'Bloquea cuentas, o da de baja perfiles por mal uso.',
             'icon' => 'document-check',
-            'href' => '#',
+            'href' => route('admin.validate-professional-data'),
         ],
     ];
 
