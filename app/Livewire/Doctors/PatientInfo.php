@@ -24,6 +24,7 @@ class PatientInfo extends Component
     public $doseUnit = 'mg';
     public $frequency = '';
     public $observations = '';
+    public $editItemId = null;
 
     public $medicationsList = [
         'Amoxicilina', 'Paracetamol', 'Ibuprofeno', 'Omeprazol', 'Losartán',
@@ -123,9 +124,23 @@ class PatientInfo extends Component
 
     public function openMedicationModal()
     {
-        $this->reset(['selectedMedication', 'searchMedication', 'dose', 'doseUnit', 'frequency', 'observations']);
+        $this->reset(['selectedMedication', 'searchMedication', 'dose', 'doseUnit', 'frequency', 'observations', 'editItemId']);
         $this->doseUnit = 'mg';
         $this->showMedicationModal = true;
+    }
+
+    public function editItem($id)
+    {
+        $item = \App\Models\PrescriptionItem::find($id);
+        if ($item && $item->prescription->doctor_id === auth()->id()) {
+            $this->editItemId = $item->id;
+            $this->selectedMedication = $item->medication_name;
+            $this->dose = $item->dose + 0; // Remove trailing zeros
+            $this->doseUnit = $item->dose_unit;
+            $this->frequency = $item->frequency;
+            $this->observations = $item->observations;
+            $this->showMedicationModal = true;
+        }
     }
 
     public function selectMedication($med)
@@ -165,19 +180,34 @@ class PatientInfo extends Component
             ]);
         }
 
-        $prescription = \App\Models\Prescription::firstOrCreate([
-            'doctor_id' => auth()->id(),
-            'patient_id' => $this->patient->id,
-        ]);
+        if ($this->editItemId) {
+            $item = \App\Models\PrescriptionItem::find($this->editItemId);
+            if ($item && $item->prescription->doctor_id === auth()->id()) {
+                $item->update([
+                    'medication_name' => $this->selectedMedication,
+                    'dose' => $this->dose,
+                    'dose_unit' => $this->doseUnit,
+                    'frequency' => $this->frequency,
+                    'observations' => $this->observations,
+                ]);
+                session()->flash('success', 'Cambios guardados correctamente.');
+            }
+        } else {
+            $prescription = \App\Models\Prescription::firstOrCreate([
+                'doctor_id' => auth()->id(),
+                'patient_id' => $this->patient->id,
+            ]);
 
-        \App\Models\PrescriptionItem::create([
-            'prescription_id' => $prescription->id,
-            'medication_name' => $this->selectedMedication,
-            'dose' => $this->dose,
-            'dose_unit' => $this->doseUnit,
-            'frequency' => $this->frequency,
-            'observations' => $this->observations,
-        ]);
+            \App\Models\PrescriptionItem::create([
+                'prescription_id' => $prescription->id,
+                'medication_name' => $this->selectedMedication,
+                'dose' => $this->dose,
+                'dose_unit' => $this->doseUnit,
+                'frequency' => $this->frequency,
+                'observations' => $this->observations,
+            ]);
+            session()->flash('success', 'Medicamento agregado correctamente.');
+        }
 
         $this->showMedicationModal = false;
         $this->checkAssigned();

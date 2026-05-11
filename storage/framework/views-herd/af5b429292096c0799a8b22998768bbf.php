@@ -1,4 +1,11 @@
 <div class="relative min-h-screen bg-white pb-[calc(8rem+env(safe-area-inset-bottom))]">
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session('success')): ?>
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition.opacity.duration.500ms class="fixed top-5 right-5 z-[150] flex items-center gap-2 rounded-lg bg-[#10b981] px-4 py-3 font-semibold text-white shadow-lg">
+            <i class="fa-solid fa-circle-check text-white"></i>
+            <span class="text-[14px]"><?php echo e(session('success')); ?></span>
+        </div>
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
     <main class="mx-auto flex w-full max-w-lg flex-col px-4 pt-6 sm:px-6 sm:pt-8 lg:px-8">
         <div class="mx-auto flex w-full flex-col gap-6">
             <div class="flex flex-col items-center">
@@ -128,7 +135,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             <p class="text-[13px] text-slate-900 font-bold max-w-[85%]">Frecuencia: <span class="text-slate-700 font-medium"><?php echo e($item->frequency); ?></span></p>
                             
                             <div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3">
-                                <button type="button" class="text-[#0b67c2]"><i class="fa-regular fa-pen-to-square text-[15px]"></i></button>
+                                <button type="button" wire:click="editItem(<?php echo e($item->id); ?>)" class="text-[#0b67c2]"><i class="fa-regular fa-pen-to-square text-[15px]"></i></button>
                                 <button type="button" wire:click="deleteItem(<?php echo e($item->id); ?>)" class="text-red-500"><i class="fa-regular fa-trash-can text-[15px]"></i></button>
                             </div>
                         </div>
@@ -176,7 +183,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     <i class="fa-solid fa-xmark text-[18px]"></i>
                 </button>
                 
-                <h3 class="mb-4 pr-6 text-center text-[16px] font-bold text-slate-900">Agrega el medicamento</h3>
+                <h3 class="mb-4 pr-6 text-center text-[16px] font-bold text-slate-900"><?php echo e($editItemId ? 'Editar medicamento' : 'Agrega el medicamento'); ?></h3>
 
                 <!-- 1. Medicamento -->
                 <div class="mb-4 relative" x-data="{ open: false }">
