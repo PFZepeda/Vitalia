@@ -112,6 +112,7 @@
                             type="date"
                             class="w-full rounded-[12px] bg-[#eef1f4] px-3 py-2 text-[14px] text-slate-900"
                             wire:model="birthDate"
+                            max="{{ date('Y-m-d') }}"
                         />
                         @error('birthDate')
                             <p class="mt-1 text-[12px] text-red-600">{{ $message }}</p>

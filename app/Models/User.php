@@ -59,4 +59,15 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
             'role' => $this->getRoleNames()->first(),
         ];
     }
+
+    /**
+     * Obtener la edad del usuario en años
+     */
+    public function getAge()
+    {
+        if (!$this->birth_date) {
+            return 0;
+        }
+        return $this->birth_date->age;
+    }
 }

@@ -4,7 +4,10 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class ResetPassword extends Component
 {
@@ -78,9 +81,6 @@ class ResetPassword extends Component
 
     public function render()
     {
-        return view('livewire.auth.reset-password')->layout('layouts.app', [
-            'title' => 'Nueva contrasena',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
-        ]);
+        return view('livewire.auth.reset-password');
     }
 }

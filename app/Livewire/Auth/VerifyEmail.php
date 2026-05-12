@@ -3,7 +3,10 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class VerifyEmail extends Component
 {
@@ -67,9 +70,6 @@ class VerifyEmail extends Component
 
     public function render()
     {
-        return view('livewire.auth.verify-email')->layout('layouts.app', [
-            'title' => 'Verificacion',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
-        ]);
+        return view('livewire.auth.verify-email');
     }
 }

@@ -4,7 +4,10 @@ namespace App\Livewire\Admin;
 
 use App\Models\User;
 use App\Support\RoleNames;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class UserManagement extends Component
 {
@@ -45,9 +48,6 @@ class UserManagement extends Component
 
         return view('livewire.admin.user-management', [
             'users' => $users
-        ])->layout('layouts.app', [
-            'title' => 'Gestión de usuarios',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
         ]);
     }
 }

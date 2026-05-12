@@ -5,7 +5,10 @@ namespace App\Livewire\Auth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class Login extends Component
 {
@@ -75,9 +78,6 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.auth.login')->layout('layouts.app', [
-            'title' => 'Iniciar sesion',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
-        ]);
+        return view('livewire.auth.login');
     }
 }

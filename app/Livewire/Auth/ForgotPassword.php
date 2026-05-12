@@ -7,7 +7,10 @@ use App\Models\PasswordResetCode;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class ForgotPassword extends Component
 {
@@ -64,9 +67,6 @@ class ForgotPassword extends Component
 
     public function render()
     {
-        return view('livewire.auth.forgot-password')->layout('layouts.app', [
-            'title' => 'Recuperar contrasena',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
-        ]);
+        return view('livewire.auth.forgot-password');
     }
 }

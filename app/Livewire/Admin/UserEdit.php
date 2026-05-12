@@ -4,7 +4,10 @@ namespace App\Livewire\Admin;
 
 use App\Models\User;
 use App\Support\RoleNames;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class UserEdit extends Component
 {
@@ -36,9 +39,6 @@ class UserEdit extends Component
 
         return view('livewire.admin.user-edit', [
             'roles' => $roles,
-        ])->layout('layouts.app', [
-            'title' => 'Editar usuario',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
         ]);
     }
 }

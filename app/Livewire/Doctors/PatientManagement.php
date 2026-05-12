@@ -4,8 +4,10 @@ namespace App\Livewire\Doctors;
 
 use App\Models\User;
 use App\Support\RoleNames;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 class PatientManagement extends Component
 {
     public $search = '';
@@ -20,9 +22,6 @@ class PatientManagement extends Component
 
         return view('livewire.doctors.patient-management', [
             'patients' => $patients,
-        ])->layout('layouts.app', [
-            'title' => 'Gestión de Pacientes',
-            'bodyClass' => 'min-h-screen bg-white text-slate-900 antialiased',
         ]);
     }
 }

@@ -65,6 +65,11 @@
                             <dt class="text-sm text-slate-400">Peso</dt>
                             <dd class="mt-1 text-lg font-semibold text-slate-900">{{ $user->weight ?? '—' }}</dd>
                         </div>
+
+                        <div>
+                            <dt class="text-sm text-slate-400">Altura</dt>
+                            <dd class="mt-1 text-lg font-semibold text-slate-900">{{ $user->height ?? '—' }}</dd>
+                        </div>
                     </dl>
                 </section>
             </div>

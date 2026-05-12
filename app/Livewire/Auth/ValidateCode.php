@@ -8,7 +8,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
+
+#[Layout('layouts.app')]
 
 class ValidateCode extends Component
 {
@@ -119,9 +122,6 @@ class ValidateCode extends Component
 
     public function render()
     {
-        return view('livewire.auth.validate-code')->layout('layouts.app', [
-            'title' => 'Validar codigo',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
-        ]);
+        return view('livewire.auth.validate-code');
     }
 }

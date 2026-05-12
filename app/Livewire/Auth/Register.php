@@ -7,8 +7,11 @@ use App\Support\RoleNames;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
+
+#[Layout('layouts.app')]
 
 class Register extends Component
 {
@@ -100,10 +103,11 @@ class Register extends Component
             'securityQuestion' => 'required|string|max:255',
             'securityAnswer' => 'required|string|max:255',
             'sex' => 'required|in:male,female',
-            'birthDate' => 'required|date',
+            'birthDate' => 'required|date|before:today',
             'password' => 'required|string|min:8|confirmed',
         ], [
             'password.confirmed' => 'Las contrasenas no coinciden.',
+            'birthDate.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
         ]);
 
         $phone = $this->buildPhoneE164($this->countryCode, $this->phoneLocal);
@@ -159,9 +163,6 @@ class Register extends Component
 
     public function render()
     {
-        return view('livewire.auth.register')->layout('layouts.app', [
-            'title' => 'Registro',
-            'bodyClass' => 'min-h-screen bg-[#f2f4f6] text-slate-900 antialiased',
-        ]);
+        return view('livewire.auth.register');
     }
 }
