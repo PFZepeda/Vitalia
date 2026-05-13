@@ -100,17 +100,17 @@
                 <!-- Lista de Medicamentos agregados -->
                 <div class="flex flex-col gap-4">
                     @forelse($this->myPrescriptionItems as $prescription)
-                        <div class="rounded-[16px] bg-[#f4f5f7] p-4 shadow-sm relative">
+                        <div class="rounded-[16px] bg-[#f4f5f7] p-4 shadow-sm relative pr-16">
                             <h3 class="text-[14px] font-bold text-[#0b67c2] mb-1.5">
                                 {{ $prescription->medication?->medication_name ?? 'Medicamento sin asignar' }}
                                 {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}</h3>
                             @if ($prescription->observations)
-                                <p class="text-[13px] text-slate-900 font-bold max-w-[85%]">Observaciones: <span
-                                        class="text-slate-700 font-medium">{{ $prescription->observations }}</span></p>
+                                <p class="text-[13px] text-slate-900 font-bold break-words">Observaciones: <span
+                                        class="text-slate-700 font-medium break-words">{{ $prescription->observations }}</span></p>
                             @endif
 
                             @if ($prescription->start_date && $prescription->end_date)
-                                <div class="mt-2 text-[12px] text-slate-600 max-w-[85%]">
+                                <div class="mt-2 text-[12px] text-slate-600">
                                     <p><span class="font-bold">📅 Fechas:</span>
                                         {{ $prescription->start_date->format('d/m/Y') }} -
                                         {{ $prescription->end_date->format('d/m/Y') }}</p>
@@ -124,7 +124,7 @@
                                     @endif
                                 </div>
                             @else
-                                <div class="mt-2 text-[12px] text-amber-600 max-w-[85%]">
+                                <div class="mt-2 text-[12px] text-amber-600">
                                     <p>⚠️ Sin fechas configuradas</p>
                                 </div>
                             @endif
@@ -162,8 +162,8 @@
                                     {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}</span></p>
 
                             @if ($prescription->observations)
-                                <p class="text-[13px] text-slate-900 font-bold mt-2">Observaciones: <span
-                                        class="font-medium text-slate-700">{{ $prescription->observations }}</span>
+                                <p class="text-[13px] text-slate-900 font-bold mt-2 break-words">Observaciones: <span
+                                        class="font-medium text-slate-700 break-words">{{ $prescription->observations }}</span>
                                 </p>
                             @else
                                 <p class="text-[13px] text-[#0b67c2] font-bold mt-2">Observaciones:<br><span
@@ -353,10 +353,10 @@
                 <div class="mb-6">
                     <div class="flex items-center justify-between mb-1">
                         <label class="block text-[13px] font-bold text-slate-900">4.- Observaciones</label>
-                        <span class="text-[11px] text-slate-500">{{ strlen($observations ?? '') }}/255</span>
+                        <span class="text-[11px] text-slate-500" wire:key="char-count-{{ strlen($observations ?? '') }}">{{ strlen($observations ?? '') }}/255</span>
                     </div>
-                    <textarea wire:model="observations" rows="2" maxlength="255"
-                        class="w-full rounded-[12px] border-none bg-white px-3 py-2 text-[13px] outline-none"
+                    <textarea wire:model.live="observations" rows="2" maxlength="255"
+                        class="w-full rounded-[12px] border-none bg-white px-3 py-2 text-[13px] outline-none break-words whitespace-normal resize-none"
                         placeholder="Máximo 255 caracteres"></textarea>
                 </div>
 
