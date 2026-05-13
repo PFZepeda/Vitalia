@@ -387,6 +387,10 @@
   <div id="content"></div>
 </div>
 
+<div id="vitaliaLogoTemplate" style="display:none;">
+    <x-vitalia-logo class="scale-[0.58] sm:scale-[0.66]" />
+</div>
+
 <script>
 (async function(){
   const contentDiv = document.getElementById('content');
@@ -456,9 +460,8 @@
           <h2 class="header-title">Validación de cédulas</h2>
         </div>
 
-        <div class="logo-section">
-          <div class="logo">✓</div>
-          <div class="logo-text">VITALIA</div>
+        <div class="flex flex-col items-center mb-6">
+          ${document.getElementById('vitaliaLogoTemplate').innerHTML}
         </div>
 
         <div class="user-info">

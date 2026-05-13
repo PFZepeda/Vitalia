@@ -13,7 +13,7 @@
                     stroke-linejoin="round" />
             </svg>
         </a>
-        <h1 class="text-[18px] sm:text-[22px] font-bold text-slate-900 truncate">Validar de Cédulas</h1>
+        <h1 class="text-[18px] sm:text-[22px] font-bold text-slate-900 truncate">Validación de Cédula</h1>
     </div>
 
 <style>
@@ -292,7 +292,7 @@
     </div>
 
       <div id="infoLegend" class="muted" style="margin-top:8px;display:none">Ya cuentas con una solicitud</div>
-      <a id="viewDocumentLink" href="#" target="_blank" style="color: #0b5ed7;display:none;margin-top:8px;display:inline-block">Ver documento</a>
+      <a id="viewDocumentLink" href="#" target="_blank" style="color: #0b5ed7;display:none;margin-top:8px;">Ver documento</a>
 
     <button id="submitBtn" type="submit" class="btn-primary">Enviar Solicitud</button>
   </form>

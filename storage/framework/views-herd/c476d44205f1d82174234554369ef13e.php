@@ -385,6 +385,31 @@
   <div id="content"></div>
 </div>
 
+<div id="vitaliaLogoTemplate" style="display:none;">
+    <?php if (isset($component)) { $__componentOriginal4a12c9b73ad7126d199a7f3a237fe5b1 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4a12c9b73ad7126d199a7f3a237fe5b1 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.vitalia-logo','data' => ['class' => 'scale-[0.58] sm:scale-[0.66]']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('vitalia-logo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'scale-[0.58] sm:scale-[0.66]']); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal4a12c9b73ad7126d199a7f3a237fe5b1)): ?>
+<?php $attributes = $__attributesOriginal4a12c9b73ad7126d199a7f3a237fe5b1; ?>
+<?php unset($__attributesOriginal4a12c9b73ad7126d199a7f3a237fe5b1); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal4a12c9b73ad7126d199a7f3a237fe5b1)): ?>
+<?php $component = $__componentOriginal4a12c9b73ad7126d199a7f3a237fe5b1; ?>
+<?php unset($__componentOriginal4a12c9b73ad7126d199a7f3a237fe5b1); ?>
+<?php endif; ?>
+</div>
+
 <script>
 (async function(){
   const contentDiv = document.getElementById('content');
@@ -454,9 +479,8 @@
           <h2 class="header-title">Validación de cédulas</h2>
         </div>
 
-        <div class="logo-section">
-          <div class="logo">✓</div>
-          <div class="logo-text">VITALIA</div>
+        <div class="flex flex-col items-center mb-6">
+          ${document.getElementById('vitaliaLogoTemplate').innerHTML}
         </div>
 
         <div class="user-info">
