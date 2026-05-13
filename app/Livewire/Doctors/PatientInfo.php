@@ -294,11 +294,21 @@ class PatientInfo extends Component
             'selectedMedication' => 'required|string',
             'dose' => 'required|numeric',
             'doseUnit' => 'required|in:mg,mL',
-            'observations' => 'nullable|string',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
+            'selectedDaysString' => 'required|string',
+            'observations' => 'nullable|string|max:255',
         ], [
             'selectedMedication.required' => 'El medicamento es obligatorio.',
             'dose.required' => 'La dosis es obligatoria.',
             'dose.numeric' => 'La dosis debe ser un número.',
+            'startDate.required' => 'La fecha de inicio es obligatoria.',
+            'startDate.date' => 'La fecha de inicio debe ser una fecha válida.',
+            'endDate.required' => 'La fecha de fin es obligatoria.',
+            'endDate.date' => 'La fecha de fin debe ser una fecha válida.',
+            'endDate.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la de inicio.',
+            'selectedDaysString.required' => 'Debes seleccionar al menos un día de la semana.',
+            'observations.max' => 'Las observaciones no pueden exceder 255 caracteres.',
         ]);
 
         if ($this->doseUnit === 'mg') {

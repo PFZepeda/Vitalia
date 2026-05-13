@@ -150,14 +150,6 @@
             @endif
 
             @if ($activeTab === 'historial')
-                <div class="flex items-center rounded-[8px] bg-[#f1f3f5] px-3 py-2.5">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <input type="text" placeholder="Buscar historial..."
-                        class="w-full bg-transparent px-2 text-[13px] text-slate-900 focus:outline-none placeholder:text-slate-400">
-                </div>
 
                 <div class="flex flex-col gap-4 mt-2">
                     @forelse($this->allPrescriptionItems as $prescription)
@@ -217,7 +209,7 @@
 
                 <!-- 1. Medicamento -->
                 <div class="mb-4 relative" x-data="{ open: false }">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">1.- Medicamento</label>
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">1.- Medicamento <span class="text-red-500">*</span></label>
                     <div class="relative" @click.outside="open = false">
                         <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -265,7 +257,7 @@
 
                 <!-- 2. Dosis -->
                 <div class="mb-4">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">2.- Dosis</label>
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">2.- Dosis <span class="text-red-500">*</span></label>
 
                     @if ($calculatedDosis)
                         <div class="space-y-3">
@@ -334,19 +326,38 @@
 
                 <!-- 3. Definir Fechas -->
                 <div class="mb-4">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">3.- Horarios de toma</label>
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">3.- Horarios de toma <span class="text-red-500">*</span></label>
                     <button type="button" wire:click="openDatesModal"
                         class="flex items-center gap-2 rounded-[12px] bg-[#0b67c2] px-4 py-2 text-[13px] font-bold text-white w-full justify-center hover:opacity-90 transition-opacity cursor-pointer">
                         <i class="fa-solid fa-calendar"></i>
                         Definir Fechas
                     </button>
+                    @if ($selectedDaysString)
+                        <div class="mt-2 inline-flex items-center rounded-[12px] bg-[#0b67c2]/10 px-3 py-1.5 text-[12px] font-bold text-[#0b67c2]">
+                            <i class="fa-solid fa-check mr-2"></i>
+                            {{ $selectedDaysString }}
+                        </div>
+                    @endif
+                    @error('startDate')
+                        <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
+                    @enderror
+                    @error('endDate')
+                        <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
+                    @enderror
+                    @error('selectedDaysString')
+                        <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- 4. Observaciones -->
                 <div class="mb-6">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">4.- Observaciones (opcional)</label>
-                    <textarea wire:model="observations" rows="2"
-                        class="w-full rounded-[12px] border-none bg-white px-3 py-2 text-[13px] outline-none"></textarea>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-[13px] font-bold text-slate-900">4.- Observaciones</label>
+                        <span class="text-[11px] text-slate-500">{{ strlen($observations ?? '') }}/255</span>
+                    </div>
+                    <textarea wire:model="observations" rows="2" maxlength="255"
+                        class="w-full rounded-[12px] border-none bg-white px-3 py-2 text-[13px] outline-none"
+                        placeholder="Máximo 255 caracteres"></textarea>
                 </div>
 
                 <!-- Footer -->
@@ -466,7 +477,7 @@
 
                     <!-- Fecha de inicio -->
                     <div class="mb-4">
-                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de inicio</label>
+                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de inicio <span class="text-red-500">*</span></label>
                         <input type="date" wire:model="startDate" min="{{ date('Y-m-d') }}"
                             max="{{ date('Y-m-d', strtotime('+3 days')) }}"
                             class="w-full rounded-[12px] border border-slate-200 bg-white px-4 py-3 text-[13px] text-slate-900 outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">
@@ -540,7 +551,7 @@
 
                     <!-- Selector de días de la semana -->
                     <div>
-                        <label class="mb-3 block text-[13px] font-bold text-slate-500">Selecciona los días</label>
+                        <label class="mb-3 block text-[13px] font-bold text-slate-500">Selecciona los días <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-4 gap-2">
                             @php
                                 $weekdays = [
@@ -582,7 +593,7 @@
 
                     <!-- Fecha de termino -->
                     <div>
-                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de termino</label>
+                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de termino <span class="text-red-500">*</span></label>
                         <input type="date" wire:model="endDate" min="{{ date('Y-m-d') }}"
                             max="{{ date('Y-m-d', strtotime('+1 year')) }}"
                             class="w-full rounded-[12px] border border-slate-200 bg-white px-4 py-3 text-[13px] text-slate-900 outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">
