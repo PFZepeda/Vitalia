@@ -461,6 +461,7 @@
       statusRow.style.display = 'block';
       statusPill.className = 'status-pill status-pendiente';
       statusPill.textContent = 'Pendiente';
+      statusReason.textContent = '';
       infoLegend.style.display = 'block';
       if(data.data && data.data.path){
         viewDocumentLink.href = '/storage/' + data.data.path;
