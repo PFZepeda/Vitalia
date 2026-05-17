@@ -20,162 +20,92 @@
             </div>
 
             <!-- Lista de recetas -->
-            <div class="flex flex-col gap-7 sm:gap-6">
-
-                <!-- Receta 1 -->
-                <div class="rounded-[18px] bg-[#f1f3f5] px-4 py-6 shadow-[0_1px_0_rgba(15,23,42,0.03)] sm:rounded-[26px] sm:p-5">
-
-                    <!-- Parte superior -->
-                    <div class="grid grid-cols-[34px_minmax(92px,1fr)_minmax(132px,auto)] items-center gap-2 sm:grid-cols-[70px_minmax(0,1fr)_minmax(230px,auto)] sm:gap-4">
-
-                        <!-- Icono -->
-                        <div class="flex items-center justify-center text-slate-900">
-                            <i class="fa-solid fa-capsules text-[26px] sm:text-[46px]"></i>
-                        </div>
-
-                        <!-- Medicamento -->
-                        <div class="min-w-0">
-                            <a href="#"
-                               class="block text-[12px] font-bold leading-tight text-[#2f6edb] hover:underline sm:text-[20px]">
-                                Amoxicilina 400 mg
-                            </a>
-
-                            <p class="mt-1 text-[12px] font-bold leading-tight text-slate-600 sm:mt-2 sm:text-[18px]">
-                                1 pastilla cada 8h
-                            </p>
-                        </div>
-
-                        <!-- Datos + botón -->
-                        <div class="min-w-0">
-                            <div class="space-y-[2px] text-[8.5px] leading-tight text-slate-700 sm:text-xs">
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-regular fa-calendar text-[#8ea0d7]"></i>
-                                    <span class="whitespace-nowrap">
-                                        <span class="font-bold">Fechas:</span>
-                                        15/05/2026 - 16/05/2026
-                                    </span>
+            @if($prescriptions && $prescriptions->isNotEmpty())
+                <div class="flex flex-col gap-7 sm:gap-6">
+                    @foreach($prescriptions as $prescription)
+                        <div class="rounded-[18px] bg-[#f1f3f5] px-4 py-6 shadow-[0_1px_0_rgba(15,23,42,0.03)] sm:rounded-[26px] sm:p-5">
+                            <div class="grid grid-cols-[34px_minmax(92px,1fr)_minmax(132px,auto)] items-center gap-2 sm:grid-cols-[70px_minmax(0,1fr)_minmax(230px,auto)] sm:gap-4">
+                                <div class="flex items-center justify-center text-slate-900">
+                                    <i class="fa-solid fa-capsules text-[26px] sm:text-[46px]"></i>
                                 </div>
 
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-regular fa-clock text-[#8ea0d7]"></i>
-                                    <span class="whitespace-nowrap">
-                                        <span class="font-bold">Hora de inicio:</span>
-                                        08:00 pm
+                                <div class="min-w-0">
+                                    <span class="block text-[12px] font-bold leading-tight text-[#2f6edb] sm:text-[20px]">
+                                        {{ $prescription->medication?->medication_name ?? 'Medicamento sin asignar' }}
                                     </span>
+
+                                    <p class="mt-1 text-[12px] font-bold leading-tight text-slate-600 sm:mt-2 sm:text-[18px]">
+                                        @if($prescription->dose !== null && $prescription->dose_unit)
+                                            Dosis: {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}
+                                        @else
+                                            Dosis por confirmar
+                                        @endif
+                                    </p>
+                                    @if($prescription->pill_count)
+                                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 sm:text-[14px]">Pastillas: {{ $prescription->pill_count }}</p>
+                                    @endif
+                                    @if($prescription->frequency_hours)
+                                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 sm:text-[14px]">Frecuencia: Cada {{ $prescription->frequency_hours }} horas</p>
+                                    @endif
                                 </div>
 
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-regular fa-calendar-check text-[#8ea0d7]"></i>
-                                    <span class="whitespace-nowrap">
-                                        <span class="font-bold">Días:</span>
-                                        Lunes, Martes
-                                    </span>
-                                </div>
-                            </div>
+                                <div class="min-w-0">
+                                    <div class="space-y-[2px] text-[8.5px] leading-tight text-slate-700 sm:text-xs">
+                                        @if($prescription->start_date && $prescription->end_date)
+                                            <div class="flex items-center gap-1">
+                                                <i class="fa-regular fa-calendar text-[#8ea0d7]"></i>
+                                                <span class="whitespace-nowrap">
+                                                    <span class="font-bold">Fechas:</span>
+                                                    {{ $prescription->start_date->format('d/m/Y') }} - {{ $prescription->end_date->format('d/m/Y') }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <div class="flex items-center gap-1">
+                                                <i class="fa-regular fa-calendar text-[#8ea0d7]"></i>
+                                                <span class="whitespace-nowrap">
+                                                    <span class="font-bold">Fechas:</span>
+                                                    Sin fechas configuradas
+                                                </span>
+                                            </div>
+                                        @endif
 
-                            <button wire:click="openModal(1)" class="mt-3 w-full rounded-full bg-[#0b67c2] px-3 py-2 text-[11px] font-bold text-white shadow transition hover:bg-blue-700 sm:w-auto sm:px-5 sm:text-[12px]">
-                                observacion de receta
-                            </button>
-                        </div>
-                    </div>
+                                        @if($prescription->administration_time)
+                                            <div class="flex items-center gap-1">
+                                                <i class="fa-regular fa-clock text-[#8ea0d7]"></i>
+                                                <span class="whitespace-nowrap">
+                                                    <span class="font-bold">Hora de inicio:</span>
+                                                    {{ \Carbon\Carbon::parse($prescription->administration_time)->format('h:i a') }}
+                                                </span>
+                                            </div>
+                                        @endif
 
-                    <!-- Barra de disponibilidad mejorada -->
-                    <div class="mt-5 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold text-slate-700 sm:text-xs">Disponibilidad</span>
-                            <span class="text-[11px] font-bold text-red-500 sm:text-xs">2/16 pastillas</span>
-                        </div>
-                        <div class="h-2 w-full overflow-hidden rounded-full bg-gradient-to-r from-slate-200 to-slate-300">
-                            <div class="h-2 rounded-full bg-gradient-to-r from-red-400 to-red-500" style="width: 12%"></div>
-                        </div>
-                        <div class="flex items-center gap-1.5 text-[10px] text-slate-600">
-                            <i class="fa-regular fa-clock text-slate-400"></i>
-                            <span>Última toma: Hoy, 08:00 AM</span>
-                        </div>
-                    </div>
-                </div>
+                                        @if($prescription->weekdays)
+                                            <div class="flex items-center gap-1">
+                                                <i class="fa-regular fa-calendar-check text-[#8ea0d7]"></i>
+                                                <span class="whitespace-nowrap">
+                                                    <span class="font-bold">Días:</span>
+                                                    {{ $prescription->weekdays }}
+                                                </span>
+                                            </div>
+                                        @endif
+                                    </div>
 
-                <!-- Receta 2 -->
-                <div class="rounded-[18px] bg-[#f1f3f5] px-4 py-6 shadow-[0_1px_0_rgba(15,23,42,0.03)] sm:rounded-[26px] sm:p-5">
-
-                    <!-- Parte superior -->
-                    <div class="grid grid-cols-[34px_minmax(92px,1fr)_minmax(132px,auto)] items-center gap-2 sm:grid-cols-[70px_minmax(0,1fr)_minmax(230px,auto)] sm:gap-4">
-
-                        <!-- Icono -->
-                        <div class="flex items-center justify-center text-slate-900">
-                            <i class="fa-solid fa-capsules text-[26px] sm:text-[46px]"></i>
-                        </div>
-
-                        <!-- Medicamento -->
-                        <div class="min-w-0">
-                            <a href="#"
-                               class="block text-[12px] font-bold leading-tight text-[#2f6edb] hover:underline sm:text-[20px]">
-                                Ibuprofeno 400 mg
-                            </a>
-
-                            <p class="mt-1 text-[12px] font-bold leading-tight text-slate-600 sm:mt-2 sm:text-[18px]">
-                                1 pastilla cada 8h
-                            </p>
-                        </div>
-
-                        <!-- Datos + botón -->
-                        <div class="min-w-0">
-                            <div class="space-y-[2px] text-[8.5px] leading-tight text-slate-700 sm:text-xs">
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-regular fa-calendar text-[#8ea0d7]"></i>
-                                    <span class="whitespace-nowrap">
-                                        <span class="font-bold">Fechas:</span>
-                                        15/05/2026 - 16/05/2026
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-regular fa-clock text-[#8ea0d7]"></i>
-                                    <span class="whitespace-nowrap">
-                                        <span class="font-bold">Hora de inicio:</span>
-                                        08:00 pm
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-regular fa-calendar-check text-[#8ea0d7]"></i>
-                                    <span class="whitespace-nowrap">
-                                        <span class="font-bold">Días:</span>
-                                        Lunes, Martes
-                                    </span>
+                                    <button wire:click="openModal({{ $prescription->id }})" class="mt-3 w-full rounded-full bg-[#0b67c2] px-3 py-2 text-[11px] font-bold text-white shadow transition hover:bg-blue-700 sm:w-auto sm:px-5 sm:text-[12px]">
+                                        Observaciones de receta
+                                    </button>
                                 </div>
                             </div>
-
-                            <button wire:click="openModal(2)" class="mt-3 w-full rounded-full bg-[#0b67c2] px-3 py-2 text-[11px] font-bold text-white shadow transition hover:bg-blue-700 sm:w-auto sm:px-5 sm:text-[12px]">
-                                observacion de receta
-                            </button>
                         </div>
-                    </div>
-
-                    <!-- Barra de disponibilidad mejorada -->
-                    <div class="mt-5 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold text-slate-700 sm:text-xs">Disponibilidad</span>
-                            <span class="text-[11px] font-bold text-emerald-500 sm:text-xs">12/16 pastillas</span>
-                        </div>
-                        <div class="h-2 w-full overflow-hidden rounded-full bg-gradient-to-r from-slate-200 to-slate-300">
-                            <div class="h-2 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style="width: 74%"></div>
-                        </div>
-                        <div class="flex items-center gap-1.5 text-[10px] text-slate-600">
-                            <i class="fa-regular fa-clock text-slate-400"></i>
-                            <span>Próxima toma: 09:00 PM</span>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-
-            </div>
+            @endif
         </div>
     </main>
 
     <!-- Modal de Observaciones -->
     @if($showModal)
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div class="relative w-full max-w-sm rounded-2xl bg-white shadow-2xl">
+        <div class="relative w-full max-w-sm rounded-2xl bg-[#f1f3f5] shadow-2xl">
             <!-- Botón Cerrar -->
             <button wire:click="closeModal()" class="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-400 shadow transition hover:text-slate-600">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -185,14 +115,14 @@
             <div class="space-y-4 p-6">
                 <h2 class="text-lg font-bold text-slate-950">Observaciones de la receta</h2>
                 
-                <div class="min-h-32 rounded-xl bg-slate-100 p-4 text-center">
-                    <p class="text-sm text-slate-500">No cuentas con observaciones en esta receta</p>
+                <div class="min-h-32 rounded-xl bg-[#d9d9d9] p-4 text-center">
+                    @if($selectedObservations)
+                        <p class="text-sm text-slate-700">{{ $selectedObservations }}</p>
+                    @else
+                        <p class="text-sm text-slate-600">No cuentas con observaciones de la receta</p>
+                    @endif
                 </div>
 
-                <!-- Botón de Acción -->
-                <button wire:click="closeModal()" class="w-full rounded-full bg-[#0b67c2] px-4 py-2 font-semibold text-white transition hover:bg-blue-700">
-                    Entendido
-                </button>
             </div>
         </div>
     </div>

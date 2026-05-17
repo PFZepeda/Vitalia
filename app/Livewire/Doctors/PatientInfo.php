@@ -25,7 +25,8 @@ class PatientInfo extends Component
     public $selectedMedication = '';
     public $dose = '';
     public $doseUnit = 'mg';
-    public $frequency = '';
+    public $frequencyHours = '';
+    public $pillCount = 1;
     public $observations = '';
     public $editItemId = null;
 
@@ -131,8 +132,9 @@ class PatientInfo extends Component
 
     public function openMedicationModal()
     {
-        $this->reset(['selectedMedication', 'searchMedication', 'dose', 'doseUnit', 'frequency', 'observations', 'editItemId', 'startDate', 'endDate', 'startHour', 'startMinute', 'startTimeFormat', 'selectedDaysString', 'currentItemForDates', 'isPm']);
+        $this->reset(['selectedMedication', 'searchMedication', 'dose', 'doseUnit', 'frequencyHours', 'pillCount', 'observations', 'editItemId', 'startDate', 'endDate', 'startHour', 'startMinute', 'startTimeFormat', 'selectedDaysString', 'currentItemForDates', 'isPm']);
         $this->doseUnit = 'mg';
+        $this->pillCount = 1;
         $this->startHour = 12;
         $this->startMinute = 0;
         $this->startTimeFormat = 'a.m.';
@@ -149,6 +151,8 @@ class PatientInfo extends Component
             $this->selectedMedication = $prescription->medication?->medication_name ?? '';
             $this->dose = $prescription->dose + 0; // Remove trailing zeros
             $this->doseUnit = $prescription->dose_unit;
+            $this->pillCount = $prescription->pill_count ?? 1;
+            $this->frequencyHours = $prescription->frequency_hours ?? '';
             $this->observations = $prescription->observations;
             
             // Cargar fechas del prescription
@@ -294,6 +298,8 @@ class PatientInfo extends Component
             'selectedMedication' => 'required|string',
             'dose' => 'required|numeric',
             'doseUnit' => 'required|in:mg,mL',
+            'pillCount' => 'required|integer|min:1|max:2',
+            'frequencyHours' => 'required|integer|in:4,8,12,24',
             'startDate' => 'required|date',
             'endDate' => 'required|date|after_or_equal:startDate',
             'selectedDaysString' => 'required|string',
@@ -302,6 +308,13 @@ class PatientInfo extends Component
             'selectedMedication.required' => 'El medicamento es obligatorio.',
             'dose.required' => 'La dosis es obligatoria.',
             'dose.numeric' => 'La dosis debe ser un número.',
+            'pillCount.required' => 'La cantidad de pastillas es obligatoria.',
+            'pillCount.integer' => 'La cantidad de pastillas debe ser un número entero.',
+            'pillCount.min' => 'La cantidad mínima es 1 pastilla.',
+            'pillCount.max' => 'La cantidad máxima es 2 pastillas.',
+            'frequencyHours.required' => 'La frecuencia de toma es obligatoria.',
+            'frequencyHours.integer' => 'La frecuencia debe ser un número válido.',
+            'frequencyHours.in' => 'La frecuencia debe ser 4, 8, 12 o 24 horas.',
             'startDate.required' => 'La fecha de inicio es obligatoria.',
             'startDate.date' => 'La fecha de inicio debe ser una fecha válida.',
             'endDate.required' => 'La fecha de fin es obligatoria.',
@@ -362,6 +375,8 @@ class PatientInfo extends Component
                     'prescription_item_id' => $prescriptionItem->id,
                     'dose' => $this->dose,
                     'dose_unit' => $this->doseUnit,
+                    'pill_count' => $this->pillCount,
+                    'frequency_hours' => $this->frequencyHours,
                     'observations' => $this->observations,
                 ];
                 
@@ -381,6 +396,8 @@ class PatientInfo extends Component
                 'prescription_item_id' => $prescriptionItem->id,
                 'dose' => $this->dose,
                 'dose_unit' => $this->doseUnit,
+                'pill_count' => $this->pillCount,
+                'frequency_hours' => $this->frequencyHours,
                 'observations' => $this->observations,
             ];
             
@@ -554,10 +571,10 @@ class PatientInfo extends Component
         ]);
 
         // Validar que la hora no sea pasada si se selecciona el día actual (today)
-        $selectedDate = Carbon::parse($this->startDate);
-        $today = Carbon::now()->startOfDay();
-        
-        if ($selectedDate->isSameDay($today)) {
+        $now = Carbon::now();
+        $selectedDate = Carbon::createFromFormat('Y-m-d', $this->startDate, $now->getTimezone());
+
+        if ($selectedDate->isSameDay($now)) {
             // Convertir hora a formato 24h para comparar
             $hour24 = $this->startHour;
             if ($this->startTimeFormat === 'p.m.' && $this->startHour !== 12) {
@@ -567,8 +584,8 @@ class PatientInfo extends Component
             }
 
             // Crear un objeto DateTime con la hora seleccionada
-            $selectedTime = Carbon::now()->setHour($hour24)->setMinute($this->startMinute)->setSecond(0);
-            $currentTime = Carbon::now();
+            $selectedTime = $selectedDate->copy()->setTime($hour24, $this->startMinute, 0);
+            $currentTime = $now;
 
             // Si la hora seleccionada es menor que la hora actual, mostrar error
             if ($selectedTime->isBefore($currentTime)) {

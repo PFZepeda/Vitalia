@@ -122,18 +122,24 @@
                 <!-- Lista de Medicamentos agregados -->
                 <div class="flex flex-col gap-4">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $this->myPrescriptionItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prescription): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                        <div class="rounded-[16px] bg-[#f4f5f7] p-4 shadow-sm relative">
+                        <div class="rounded-[16px] bg-[#f4f5f7] p-4 shadow-sm relative pr-16">
                             <h3 class="text-[14px] font-bold text-[#0b67c2] mb-1.5">
                                 <?php echo e($prescription->medication?->medication_name ?? 'Medicamento sin asignar'); ?>
 
                                 <?php echo e($prescription->dose + 0); ?> <?php echo e($prescription->dose_unit); ?></h3>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->pill_count): ?>
+                                <p class="text-[12px] text-slate-600 font-semibold">Pastillas: <?php echo e($prescription->pill_count); ?></p>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->frequency_hours): ?>
+                                <p class="text-[12px] text-slate-600 font-semibold">Frecuencia: Cada <?php echo e($prescription->frequency_hours); ?> horas</p>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->observations): ?>
-                                <p class="text-[13px] text-slate-900 font-bold max-w-[85%]">Observaciones: <span
-                                        class="text-slate-700 font-medium"><?php echo e($prescription->observations); ?></span></p>
+                                <p class="text-[13px] text-slate-900 font-bold break-words">Observaciones: <span
+                                        class="text-slate-700 font-medium break-words"><?php echo e($prescription->observations); ?></span></p>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->start_date && $prescription->end_date): ?>
-                                <div class="mt-2 text-[12px] text-slate-600 max-w-[85%]">
+                                <div class="mt-2 text-[12px] text-slate-600">
                                     <p><span class="font-bold">📅 Fechas:</span>
                                         <?php echo e($prescription->start_date->format('d/m/Y')); ?> -
                                         <?php echo e($prescription->end_date->format('d/m/Y')); ?></p>
@@ -148,7 +154,7 @@
                                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                 </div>
                             <?php else: ?>
-                                <div class="mt-2 text-[12px] text-amber-600 max-w-[85%]">
+                                <div class="mt-2 text-[12px] text-amber-600">
                                     <p>⚠️ Sin fechas configuradas</p>
                                 </div>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -174,14 +180,6 @@
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($activeTab === 'historial'): ?>
-                <div class="flex items-center rounded-[8px] bg-[#f1f3f5] px-3 py-2.5">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <input type="text" placeholder="Buscar historial..."
-                        class="w-full bg-transparent px-2 text-[13px] text-slate-900 focus:outline-none placeholder:text-slate-400">
-                </div>
 
                 <div class="flex flex-col gap-4 mt-2">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $this->allPrescriptionItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prescription): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -193,10 +191,16 @@
                                     class="text-[#f78b31] font-bold"><?php echo e($prescription->medication?->medication_name ?? 'Medicamento sin asignar'); ?>
 
                                     <?php echo e($prescription->dose + 0); ?> <?php echo e($prescription->dose_unit); ?></span></p>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->pill_count): ?>
+                                <p class="text-[12px] text-slate-600 font-semibold">Pastillas: <?php echo e($prescription->pill_count); ?></p>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->frequency_hours): ?>
+                                <p class="text-[12px] text-slate-600 font-semibold">Frecuencia: Cada <?php echo e($prescription->frequency_hours); ?> horas</p>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($prescription->observations): ?>
-                                <p class="text-[13px] text-slate-900 font-bold mt-2">Observaciones: <span
-                                        class="font-medium text-slate-700"><?php echo e($prescription->observations); ?></span>
+                                <p class="text-[13px] text-slate-900 font-bold mt-2 break-words">Observaciones: <span
+                                        class="font-medium text-slate-700 break-words"><?php echo e($prescription->observations); ?></span>
                                 </p>
                             <?php else: ?>
                                 <p class="text-[13px] text-[#0b67c2] font-bold mt-2">Observaciones:<br><span
@@ -243,7 +247,7 @@
 
                 <!-- 1. Medicamento -->
                 <div class="mb-4 relative" x-data="{ open: false }">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">1.- Medicamento</label>
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">1.- Medicamento <span class="text-red-500">*</span></label>
                     <div class="relative" @click.outside="open = false">
                         <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -300,7 +304,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 <!-- 2. Dosis -->
                 <div class="mb-4">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">2.- Dosis</label>
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">2.- Dosis <span class="text-red-500">*</span></label>
 
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($calculatedDosis): ?>
                         <div class="space-y-3">
@@ -331,6 +335,23 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                     <?php echo e($doseUnit); ?>
 
                                 </div>
+                            </div>
+
+                            <div>
+                                <label class="mb-1 block text-[12px] font-bold text-slate-700">Pastillas <span class="text-red-500">*</span></label>
+                                <input type="number" min="1" max="2" step="1" wire:model="pillCount"
+                                    class="w-full rounded-[12px] border border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-900 font-bold outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]"
+                                    placeholder="1">
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['pillCount'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <span class="block text-[11px] text-red-500 mt-1"><?php echo e($message); ?></span>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
 
                             <!-- Información de dosis máxima -->
@@ -364,6 +385,12 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                     —
                                 </div>
                             </div>
+                            <div>
+                                <label class="mb-1 block text-[12px] font-bold text-slate-500">Pastillas</label>
+                                <input type="number" min="1" max="2" step="1" disabled
+                                    class="w-full rounded-[12px] border border-slate-200 bg-slate-100 px-3 py-2 text-[13px] text-slate-400 font-bold"
+                                    placeholder="1">
+                            </div>
                             <p class="text-[12px] text-slate-400">Selecciona un medicamento para calcular la dosis</p>
                         </div>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -371,19 +398,83 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 <!-- 3. Definir Fechas -->
                 <div class="mb-4">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">3.- Horarios de toma</label>
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">3.- Horarios de toma <span class="text-red-500">*</span></label>
                     <button type="button" wire:click="openDatesModal"
                         class="flex items-center gap-2 rounded-[12px] bg-[#0b67c2] px-4 py-2 text-[13px] font-bold text-white w-full justify-center hover:opacity-90 transition-opacity cursor-pointer">
                         <i class="fa-solid fa-calendar"></i>
                         Definir Fechas
                     </button>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectedDaysString): ?>
+                        <div class="mt-2 inline-flex items-center rounded-[12px] bg-[#0b67c2]/10 px-3 py-1.5 text-[12px] font-bold text-[#0b67c2]">
+                            <i class="fa-solid fa-check mr-2"></i>
+                            <?php echo e($selectedDaysString); ?>
+
+                        </div>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['startDate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="block text-[11px] text-red-500 mt-1"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['endDate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="block text-[11px] text-red-500 mt-1"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['selectedDaysString'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="block text-[11px] text-red-500 mt-1"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </div>
+
+                <!-- Frecuencia de toma -->
+                <div class="mb-4">
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">Frecuencia de toma <span class="text-red-500">*</span></label>
+                    <select wire:model="frequencyHours"
+                        class="w-full rounded-[12px] border border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-900 font-semibold outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">
+                        <option value="">Selecciona la frecuencia</option>
+                        <option value="4">Cada 4 horas</option>
+                        <option value="8">Cada 8 horas</option>
+                        <option value="12">Cada 12 horas</option>
+                        <option value="24">Cada 24 horas</option>
+                    </select>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['frequencyHours'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="block text-[11px] text-red-500 mt-1"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
 
                 <!-- 4. Observaciones -->
                 <div class="mb-6">
-                    <label class="mb-1 block text-[13px] font-bold text-slate-900">4.- Observaciones (opcional)</label>
-                    <textarea wire:model="observations" rows="2"
-                        class="w-full rounded-[12px] border-none bg-white px-3 py-2 text-[13px] outline-none"></textarea>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-[13px] font-bold text-slate-900">4.- Observaciones</label>
+                        <span class="text-[11px] text-slate-500" <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'char-count-'.e(strlen($observations ?? '')).''; ?>wire:key="char-count-<?php echo e(strlen($observations ?? '')); ?>"><?php echo e(strlen($observations ?? '')); ?>/255</span>
+                    </div>
+                    <textarea wire:model.live="observations" rows="2" maxlength="255"
+                        class="w-full rounded-[12px] border-none bg-white px-3 py-2 text-[13px] outline-none break-words whitespace-normal resize-none"
+                        placeholder="Máximo 255 caracteres"></textarea>
                 </div>
 
                 <!-- Footer -->
@@ -517,7 +608,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                     <!-- Fecha de inicio -->
                     <div class="mb-4">
-                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de inicio</label>
+                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de inicio <span class="text-red-500">*</span></label>
                         <input type="date" wire:model="startDate" min="<?php echo e(date('Y-m-d')); ?>"
                             max="<?php echo e(date('Y-m-d', strtotime('+3 days'))); ?>"
                             class="w-full rounded-[12px] border border-slate-200 bg-white px-4 py-3 text-[13px] text-slate-900 outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">
@@ -605,7 +696,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                     <!-- Selector de días de la semana -->
                     <div>
-                        <label class="mb-3 block text-[13px] font-bold text-slate-500">Selecciona los días</label>
+                        <label class="mb-3 block text-[13px] font-bold text-slate-500">Selecciona los días <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-4 gap-2">
                             <?php
                                 $weekdays = [
@@ -655,7 +746,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                     <!-- Fecha de termino -->
                     <div>
-                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de termino</label>
+                        <label class="mb-2 block text-[13px] font-bold text-slate-500">Fecha de termino <span class="text-red-500">*</span></label>
                         <input type="date" wire:model="endDate" min="<?php echo e(date('Y-m-d')); ?>"
                             max="<?php echo e(date('Y-m-d', strtotime('+1 year'))); ?>"
                             class="w-full rounded-[12px] border border-slate-200 bg-white px-4 py-3 text-[13px] text-slate-900 outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">

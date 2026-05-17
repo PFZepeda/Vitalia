@@ -104,6 +104,12 @@
                             <h3 class="text-[14px] font-bold text-[#0b67c2] mb-1.5">
                                 {{ $prescription->medication?->medication_name ?? 'Medicamento sin asignar' }}
                                 {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}</h3>
+                            @if ($prescription->pill_count)
+                                <p class="text-[12px] text-slate-600 font-semibold">Pastillas: {{ $prescription->pill_count }}</p>
+                            @endif
+                            @if ($prescription->frequency_hours)
+                                <p class="text-[12px] text-slate-600 font-semibold">Frecuencia: Cada {{ $prescription->frequency_hours }} horas</p>
+                            @endif
                             @if ($prescription->observations)
                                 <p class="text-[13px] text-slate-900 font-bold break-words">Observaciones: <span
                                         class="text-slate-700 font-medium break-words">{{ $prescription->observations }}</span></p>
@@ -160,6 +166,12 @@
                                     class="font-bold text-[#0b67c2]">Medicamento:</span> <span
                                     class="text-[#f78b31] font-bold">{{ $prescription->medication?->medication_name ?? 'Medicamento sin asignar' }}
                                     {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}</span></p>
+                            @if ($prescription->pill_count)
+                                <p class="text-[12px] text-slate-600 font-semibold">Pastillas: {{ $prescription->pill_count }}</p>
+                            @endif
+                            @if ($prescription->frequency_hours)
+                                <p class="text-[12px] text-slate-600 font-semibold">Frecuencia: Cada {{ $prescription->frequency_hours }} horas</p>
+                            @endif
 
                             @if ($prescription->observations)
                                 <p class="text-[13px] text-slate-900 font-bold mt-2 break-words">Observaciones: <span
@@ -289,6 +301,16 @@
                                 </div>
                             </div>
 
+                            <div>
+                                <label class="mb-1 block text-[12px] font-bold text-slate-700">Pastillas <span class="text-red-500">*</span></label>
+                                <input type="number" min="1" max="2" step="1" wire:model="pillCount"
+                                    class="w-full rounded-[12px] border border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-900 font-bold outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]"
+                                    placeholder="1">
+                                @error('pillCount')
+                                    <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                             <!-- Información de dosis máxima -->
                             <div class="rounded-[12px] bg-[#f1f3f5] px-3 py-2">
                                 <p class="text-[11px] text-slate-600">Máximo recomendado: <span
@@ -319,6 +341,12 @@
                                     —
                                 </div>
                             </div>
+                            <div>
+                                <label class="mb-1 block text-[12px] font-bold text-slate-500">Pastillas</label>
+                                <input type="number" min="1" max="2" step="1" disabled
+                                    class="w-full rounded-[12px] border border-slate-200 bg-slate-100 px-3 py-2 text-[13px] text-slate-400 font-bold"
+                                    placeholder="1">
+                            </div>
                             <p class="text-[12px] text-slate-400">Selecciona un medicamento para calcular la dosis</p>
                         </div>
                     @endif
@@ -345,6 +373,22 @@
                         <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
                     @enderror
                     @error('selectedDaysString')
+                        <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Frecuencia de toma -->
+                <div class="mb-4">
+                    <label class="mb-1 block text-[13px] font-bold text-slate-900">Frecuencia de toma <span class="text-red-500">*</span></label>
+                    <select wire:model="frequencyHours"
+                        class="w-full rounded-[12px] border border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-900 font-semibold outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">
+                        <option value="">Selecciona la frecuencia</option>
+                        <option value="4">Cada 4 horas</option>
+                        <option value="8">Cada 8 horas</option>
+                        <option value="12">Cada 12 horas</option>
+                        <option value="24">Cada 24 horas</option>
+                    </select>
+                    @error('frequencyHours')
                         <span class="block text-[11px] text-red-500 mt-1">{{ $message }}</span>
                     @enderror
                 </div>
