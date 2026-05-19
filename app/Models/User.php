@@ -80,4 +80,20 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasMany(Prescription::class, 'patient_id');
     }
+
+    /**
+     * Relación con el cuidador asignado (si el usuario es paciente)
+     */
+    public function caregiver(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CaregiverRequest::class, 'patient_id')->where('status', 'accepted');
+    }
+
+    /**
+     * Relación con el paciente asignado (si el usuario es cuidador)
+     */
+    public function assignedPatient(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CaregiverRequest::class, 'caregiver_id')->where('status', 'accepted');
+    }
 }

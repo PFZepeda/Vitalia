@@ -11,6 +11,20 @@ use Livewire\Component;
 class PatientManagement extends Component
 {
     public $search = '';
+    public $selectedPatient = null;
+    public $showReportsModal = false;
+
+    public function openReportsModal($patientId)
+    {
+        $this->selectedPatient = User::with(['prescriptions.medication'])->find($patientId);
+        $this->showReportsModal = true;
+    }
+
+    public function closeReportsModal()
+    {
+        $this->showReportsModal = false;
+        $this->selectedPatient = null;
+    }
 
     public function render()
     {

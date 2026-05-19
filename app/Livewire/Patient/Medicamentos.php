@@ -117,9 +117,26 @@ class Medicamentos extends Component
 
             // Verificar si el stock bajó de 3 unidades para enviar correo
             if ($stock->fresh()->current_pills <= 3) {
-                \Illuminate\Support\Facades\Mail::to(Auth::user())->send(
-                    new \App\Mail\LowMedicationStockAlert(Auth::user(), $prescription->medication, $stock->current_pills)
+                $patient = Auth::user();
+                $medication = $prescription->medication;
+                $currentStock = $stock->current_pills;
+
+                // Enviar al paciente
+                \Illuminate\Support\Facades\Mail::to($patient)->send(
+                    new \App\Mail\LowMedicationStockAlert($patient, $medication, $currentStock)
                 );
+
+                // Enviar al cuidador asignado si existe
+                $assignment = \App\Models\CaregiverRequest::where('patient_id', $patient->id)
+                    ->where('status', 'accepted')
+                    ->with('caregiver')
+                    ->first();
+                
+                if ($assignment && $assignment->caregiver) {
+                    \Illuminate\Support\Facades\Mail::to($assignment->caregiver)->send(
+                        new \App\Mail\LowMedicationStockAlert($patient, $medication, $currentStock)
+                    );
+                }
             }
         });
 
@@ -173,10 +190,27 @@ class Medicamentos extends Component
         $tomorrowMidnight = $now->copy()->addDay()->startOfDay();
         $showThreshold = $now->copy()->addMinutes(15);
 
+        $userId = Auth::id();
+        $user = Auth::user();
+
+        // Si es cuidador, ver las dosis del paciente asignado
+        if ($user && $user->hasRole(\App\Support\RoleNames::CAREGIVER)) {
+            $assignment = \App\Models\CaregiverRequest::where('caregiver_id', $userId)
+                ->where('status', 'accepted')
+                ->first();
+            
+            if ($assignment) {
+                $userId = $assignment->patient_id;
+            } else {
+                $this->doses = collect();
+                return;
+            }
+        }
+
         $this->doses = PrescriptionDose::query()
             ->with(['prescription.medication'])
-            ->whereHas('prescription', function ($query) {
-                $query->where('patient_id', Auth::id());
+            ->whereHas('prescription', function ($query) use ($userId) {
+                $query->where('patient_id', $userId);
             })
             ->where(function ($query) use ($todayStart, $todayEnd, $tomorrowMidnight) {
                 $query->whereBetween('scheduled_at', [$todayStart, $todayEnd])

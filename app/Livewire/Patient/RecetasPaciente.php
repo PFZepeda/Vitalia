@@ -20,9 +20,26 @@ class RecetasPaciente extends Component
 
     public function loadPrescriptions(): void
     {
+        $userId = Auth::id();
+        $user = Auth::user();
+
+        // Si es cuidador, buscar el ID del paciente asignado
+        if ($user && $user->hasRole(\App\Support\RoleNames::CAREGIVER)) {
+            $assignment = \App\Models\CaregiverRequest::where('caregiver_id', $userId)
+                ->where('status', 'accepted')
+                ->first();
+            
+            if ($assignment) {
+                $userId = $assignment->patient_id;
+            } else {
+                $this->prescriptions = collect();
+                return;
+            }
+        }
+
         $this->prescriptions = Prescription::query()
             ->with(['medication', 'patient.medicationStocks'])
-            ->where('patient_id', Auth::id())
+            ->where('patient_id', $userId)
             ->latest('start_date')
             ->latest('created_at')
             ->get();

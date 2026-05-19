@@ -96,10 +96,13 @@
                             </p>
 
                         </div>
-                        <div class="absolute right-4 top-4 flex gap-2">
+                        <div class="absolute right-4 top-4 flex flex-col gap-2 items-end">
                             <a href="<?php echo e(route('doctor.patients.show', $patient)); ?>" class="text-[#0b67c2]">
                                 <i class="fa-regular fa-pen-to-square text-[18px]"></i>
                             </a>
+                            <button wire:click="openReportsModal(<?php echo e($patient->id); ?>)" class="mt-2 bg-[#0b67c2] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                                Lista de reportes
+                            </button>
                         </div>
                     </div>
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
@@ -108,6 +111,65 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal Lista de Reportes -->
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($showReportsModal && $selectedPatient): ?>
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+        <div class="bg-white rounded-[24px] w-full max-w-[360px] flex flex-col shadow-2xl animate-in zoom-in-95 duration-300">
+            <!-- Modal Header -->
+            <div class="p-6 pb-2 flex justify-between items-start">
+                <div>
+                    <h2 class="text-[18px] font-bold text-slate-900">Lista de reportes</h2>
+                    <p class="text-[12px] text-slate-400 font-medium mt-1 leading-tight">
+                        Reportes semanales de <?php echo e($selectedPatient->name); ?><br>
+                        Los reportes semanales se generan cada domingo.
+                    </p>
+                </div>
+                <button wire:click="closeReportsModal" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark text-[20px]"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 pt-4 max-h-[400px] overflow-y-auto">
+                <?php
+                    $hasPrescriptions = $selectedPatient->prescriptions->isNotEmpty();
+                    // Generar fechas de los últimos 4 domingos (o hoy si es domingo)
+                    $reports = [];
+                    if ($hasPrescriptions) {
+                        for ($i = 0; $i < 4; $i++) {
+                            $date = \Carbon\Carbon::now()->subWeeks($i);
+                            if (!$date->isSunday()) {
+                                $date = $date->previous(\Carbon\Carbon::SUNDAY);
+                            }
+                            // Solo mostrar si el reporte es posterior a la creación de la receta más antigua
+                            if ($date->greaterThanOrEqualTo($selectedPatient->prescriptions->min('created_at')->startOfDay())) {
+                                $reports[] = $date;
+                            }
+                        }
+                    }
+                ?>
+
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reportDate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <div class="flex items-center justify-between py-4 border-b border-slate-50 last:border-none">
+                        <span class="text-[14px] font-bold text-slate-700"><?php echo e($reportDate->format('d/m/Y')); ?></span>
+                        <a href="<?php echo e(route('doctor.reports.weekly', ['patient' => $selectedPatient->id, 'date' => $reportDate->format('Y-m-d')])); ?>" class="bg-[#0b67c2] text-white text-[12px] font-bold px-4 py-2 rounded-xl hover:bg-blue-700 transition">
+                            Ver detalle <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                        </a>
+                    </div>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    <div class="text-center py-10">
+                        <div class="bg-slate-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-file-invoice text-slate-300 text-[24px]"></i>
+                        </div>
+                        <p class="text-slate-400 text-[14px] font-bold">No se han encontrado reportes disponibles</p>
+                    </div>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
     <?php if (isset($component)) { $__componentOriginal36aa088aadd7276f1a1850953ba55642 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal36aa088aadd7276f1a1850953ba55642 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.vitalia-bottom-nav','data' => ['active' => 'home']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

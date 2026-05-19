@@ -81,6 +81,7 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 	Route::get('/doctor/patients', \App\Livewire\Doctors\PatientManagement::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.patients.index');
 	Route::get('/doctor/my-patients', \App\Livewire\Doctors\MyPatients::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.my-patients.index');
 	Route::get('/doctor/patients/{user}', \App\Livewire\Doctors\PatientInfo::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.patients.show');
+	Route::get('/doctor/patients/{patient}/reports/{date}', \App\Livewire\Doctors\WeeklyReport::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.reports.weekly');
 	Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.dashboard');
 	Route::get('/pharmaceutical/patients', \App\Livewire\Pharmaceutical\PatientList::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.patients.list');
 	Route::get('/pharmaceutical/medications/{patient}', \App\Livewire\Pharmaceutical\CurrentMedications::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.medications.current');
@@ -181,6 +182,24 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 
 			if ($request->user() && $patient->id === $request->user()->id) {
 				$validator->errors()->add('patient_email', 'No puedes enviarte una solicitud a ti mismo.');
+			}
+
+			// Restricción 1:1 - Un cuidador solo puede tener 1 paciente
+			$existingAsCaregiver = CaregiverRequest::where('caregiver_id', $request->user()->id)
+				->where('status', 'accepted')
+				->exists();
+			if ($existingAsCaregiver) {
+				$validator->errors()->add('patient_email', 'Ya tienes un paciente asignado. Solo puedes cuidar a un paciente a la vez.');
+				return;
+			}
+
+			// Restricción 1:1 - Un paciente solo puede tener 1 cuidador
+			$existingAsPatient = CaregiverRequest::where('patient_id', $patient->id)
+				->where('status', 'accepted')
+				->exists();
+			if ($existingAsPatient) {
+				$validator->errors()->add('patient_email', 'Este paciente ya tiene un cuidador asignado.');
+				return;
 			}
 		});
 

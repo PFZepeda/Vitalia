@@ -11,7 +11,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-2">
-                <a href="#" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
+                <a href="{{ route('patient.medicamentos') }}" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
                     <div class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2]">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10">
                             <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="2" />
@@ -19,15 +19,15 @@
                         </svg>
                     </div>
                     <div class="min-w-0 flex-1 text-left">
-                        <h2 class="text-[18px] font-bold text-slate-950">Resumen de pacientes</h2>
-                        <p class="mt-1 text-[15px] leading-5 text-slate-400">Consulta el estado de cada paciente.</p>
+                        <h2 class="text-[18px] font-bold text-slate-950">Tomas del paciente</h2>
+                        <p class="mt-1 text-[15px] leading-5 text-slate-400">Consulta de información acerca del paciente que estas cuidando</p>
                     </div>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 shrink-0 text-slate-950">
                         <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </a>
 
-                <a href="#" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
+                <a href="{{ route('patient.recetas') }}" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
                     <div class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2]">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10">
                             <path d="M12 4L3.5 19.5H20.5L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
@@ -36,38 +36,8 @@
                         </svg>
                     </div>
                     <div class="min-w-0 flex-1 text-left">
-                        <h2 class="text-[18px] font-bold text-slate-950">Alertas criticas</h2>
-                        <p class="mt-1 text-[15px] leading-5 text-slate-400">Revisa notificaciones si hubo efectos adversos.</p>
-                    </div>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 shrink-0 text-slate-950">
-                        <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-
-                <a href="#" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
-                    <div class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2]">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10">
-                            <path d="M5 18V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                            <path d="M5 18H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                            <path d="M7.5 15L11 11L13.5 13L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <div class="min-w-0 flex-1 text-left">
-                        <h2 class="text-[18px] font-bold text-slate-950">Reporte semanal</h2>
-                        <p class="mt-1 text-[15px] leading-5 text-slate-400">Visualiza una grafica que compara la semana actual con la anterior.</p>
-                    </div>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 shrink-0 text-slate-950">
-                        <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-
-                <a href="#" class="flex h-full items-center gap-4 rounded-[26px] bg-[#f1f3f5] px-4 py-4 shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-transform hover:scale-[1.01]">
-                    <div class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2]">
-                        <i class="fa-solid fa-clock-rotate-left text-[28px]"></i>
-                    </div>
-                    <div class="min-w-0 flex-1 text-left">
-                        <h2 class="text-[18px] font-bold text-slate-950">Recordatorio del medico</h2>
-                        <p class="mt-1 text-[15px] leading-5 text-slate-400">Revisa notas del medico o nuevas preinscripciones digitales.</p>
+                        <h2 class="text-[18px] font-bold text-slate-950">Recetas del paciente</h2>
+                        <p class="mt-1 text-[15px] leading-5 text-slate-400">Consulta información acerca de los medicamentos y recetas del paciente</p>
                     </div>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 shrink-0 text-slate-950">
                         <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
