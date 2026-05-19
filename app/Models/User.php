@@ -70,4 +70,14 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         }
         return $this->birth_date->age;
     }
+
+    public function medicationStocks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PatientMedicationStock::class, 'patient_id');
+    }
+
+    public function prescriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Prescription::class, 'patient_id');
+    }
 }

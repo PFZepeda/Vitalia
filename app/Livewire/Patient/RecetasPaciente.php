@@ -21,7 +21,7 @@ class RecetasPaciente extends Component
     public function loadPrescriptions(): void
     {
         $this->prescriptions = Prescription::query()
-            ->with('medication')
+            ->with(['medication', 'patient.medicationStocks'])
             ->where('patient_id', Auth::id())
             ->latest('start_date')
             ->latest('created_at')

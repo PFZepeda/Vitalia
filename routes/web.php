@@ -83,8 +83,8 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 	Route::get('/doctor/patients/{user}', \App\Livewire\Doctors\PatientInfo::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.patients.show');
 	Route::get('/pharmaceutical', PharmaceuticalDashboard::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.dashboard');
 	Route::get('/pharmaceutical/patients', \App\Livewire\Pharmaceutical\PatientList::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.patients.list');
-	Route::get('/pharmaceutical/medications', \App\Livewire\Pharmaceutical\CurrentMedications::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.medications.current');
-	Route::get('/pharmaceutical/medications/stock', \App\Livewire\Pharmaceutical\MedicationStock::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.medications.stock');
+	Route::get('/pharmaceutical/medications/{patient}', \App\Livewire\Pharmaceutical\CurrentMedications::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.medications.current');
+	Route::get('/pharmaceutical/medications/{patient}/stock/{item}', \App\Livewire\Pharmaceutical\MedicationStock::class)->middleware('role:'.RoleNames::PHARMACIST.',web')->name('pharmaceutical.medications.stock');
 	Route::get('/admin', AdminDashboard::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.dashboard');
 	Route::get('/admin/users', \App\Livewire\Admin\UserManagement::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.users.index');
 	Route::get('/admin/users/{user}/edit', \App\Livewire\Admin\UserEdit::class)->middleware('role:'.RoleNames::ADMIN.',web')->name('admin.users.edit');

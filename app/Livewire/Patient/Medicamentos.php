@@ -74,17 +74,54 @@ class Medicamentos extends Component
             return;
         }
 
+        $prescription = $dose->prescription;
+        
+        // Verificar si el paciente tiene stock suficiente antes de permitir la toma
+        if ($prescription && $prescription->prescription_item_id) {
+            $stock = \App\Models\PatientMedicationStock::where('patient_id', Auth::id())
+                ->where('prescription_item_id', $prescription->prescription_item_id)
+                ->first();
+
+            $pillsNeeded = $prescription->pill_count ?? 1;
+
+            if (!$stock || $stock->current_pills < $pillsNeeded) {
+                $this->dispatch('swal:error', [
+                    'title' => 'Sin stock',
+                    'text' => 'No cuentas con suficientes pastillas en stock para confirmar esta toma. Por favor, acude con tu farmacéutico.',
+                ]);
+                $this->resetActionState();
+                return;
+            }
+        }
+
         $now = Carbon::now();
 
-        $dose->update([
-            'status' => 'taken',
-            'taken_at' => $now,
-            'missed_at' => null,
-            'miss_reason' => null,
-            'miss_other' => null,
-        ]);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($dose, $now, $prescription) {
+            $dose->update([
+                'status' => 'taken',
+                'taken_at' => $now,
+                'missed_at' => null,
+                'miss_reason' => null,
+                'miss_other' => null,
+            ]);
 
-        $this->updatePrescriptionStatus($dose, 'taken', $now);
+            $this->updatePrescriptionStatus($dose, 'taken', $now);
+
+            // Restar del stock del paciente
+            $stock = \App\Models\PatientMedicationStock::where('patient_id', Auth::id())
+                ->where('prescription_item_id', $prescription->prescription_item_id)
+                ->first();
+
+            $pillsToSubtract = $prescription->pill_count ?? 1;
+            $stock->decrement('current_pills', $pillsToSubtract);
+
+            // Verificar si el stock bajó de 3 unidades para enviar correo
+            if ($stock->fresh()->current_pills <= 3) {
+                \Illuminate\Support\Facades\Mail::to(Auth::user())->send(
+                    new \App\Mail\LowMedicationStockAlert(Auth::user(), $prescription->medication, $stock->current_pills)
+                );
+            }
+        });
 
         $this->resetActionState();
         $this->loadDoses();
