@@ -30,6 +30,11 @@ class DemoUsersSeeder extends Seeder
                 'email' => env('DEMO_PHARMACIST_EMAIL', 'farmaceutico@vitalia.test'),
                 'password' => env('DEMO_PHARMACIST_PASSWORD', 'Password123!'),
             ],
+             RoleNames::PATIENT => [
+                'name' => env('DEMO_PATIENT_NAME', 'Paciente Demo'),
+                'email' => env('DEMO_PATIENT_EMAIL', 'paciente@vitalia.test'),
+                'password'=> env('DEMO_PATIENT_PASSWORD', 'Password123!'),
+        ],
         ];
 
         foreach ($demoUsers as $roleName => $payload) {

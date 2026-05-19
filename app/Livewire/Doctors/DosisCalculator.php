@@ -13,13 +13,20 @@ class DosisCalculator extends Component
     public $selectedPatientId = null;
     public $patient = null;
     public $medications = [
-        'Amoxicilina' => ['base_dose' => 25, 'unit' => 'mg/kg', 'max' => 500],
-        'Paracetamol' => ['base_dose' => 15, 'unit' => 'mg/kg', 'max' => 500],
-        'Ibuprofeno' => ['base_dose' => 10, 'unit' => 'mg/kg', 'max' => 400],
-        'Penicilina V' => ['base_dose' => 12.5, 'unit' => 'mg/kg', 'max' => 250],
-        'Cefalexina' => ['base_dose' => 25, 'unit' => 'mg/kg', 'max' => 500],
+        'Amoxicilina' => ['base_dose' => 25, 'unit' => 'mg/kg', 'dosis_1' => 250, 'dosis_2' => 500],
+        'Paracetamol' => ['base_dose' => 15, 'unit' => 'mg/kg', 'dosis_1' => 250, 'dosis_2' => 500],
+        'Ibuprofeno' => ['base_dose' => 10, 'unit' => 'mg/kg', 'dosis_1' => 400, 'dosis_2' => 800],
+        'Penicilina V' => ['base_dose' => 12.5, 'unit' => 'mg/kg', 'dosis_1' => 125, 'dosis_2' => 250],
+        'Cefalexina' => ['base_dose' => 25, 'unit' => 'mg/kg', 'dosis_1' => 250, 'dosis_2' => 500],
+        'Naproxeno' => ['base_dose' => 5, 'unit' => 'mg/kg', 'dosis_1' => 250, 'dosis_2' => 500],
+        'Prednisona' => ['base_dose' => 1, 'unit' => 'mg/kg', 'dosis_1' => 5, 'dosis_2' => 20],
+        'Sertralina' => ['base_dose' => 1, 'unit' => 'mg/kg', 'dosis_1' => 50, 'dosis_2' => 100],
+        'Tramadol' => ['base_dose' => 1, 'unit' => 'mg/kg', 'dosis_1' => 50, 'dosis_2' => 100],
+        'Dextrometorfano' => ['base_dose' => 0.5, 'unit' => 'mg/kg', 'dosis_1' => 15, 'dosis_2' => 30],
+        'Difenhidramina' => ['base_dose' => 1.25, 'unit' => 'mg/kg', 'dosis_1' => 25, 'dosis_2' => 50],
     ];
     public $selectedMedication = null;
+    public $selectedDosisLevel = 1; // 1 o 2
     public $calculatedDosis = null;
     public $dosisMethod = 'weight'; // weight, age, bsa
 
@@ -35,11 +42,16 @@ class DosisCalculator extends Component
     {
         if ($value) {
             $this->patient = User::find($value);
+            if ($this->selectedMedication) {
+                $this->selectedDosisLevel = $this->determineAutomaticDosisLevel();
+                $this->calculateDosis();
+            }
         }
     }
 
     public function updatedSelectedMedication()
     {
+        $this->selectedDosisLevel = $this->determineAutomaticDosisLevel();
         $this->calculateDosis();
     }
 
@@ -48,6 +60,22 @@ class DosisCalculator extends Component
         if ($this->selectedMedication) {
             $this->calculateDosis();
         }
+    }
+
+    public function updatedSelectedDosisLevel()
+    {
+        if ($this->selectedMedication) {
+            $this->calculateDosis();
+        }
+    }
+
+    private function determineAutomaticDosisLevel(): int
+    {
+        if (!$this->patient) {
+            return 1;
+        }
+        $age = $this->patient->getAge();
+        return $age >= 12 ? 2 : 1;
     }
 
     public function calculateDosis()
@@ -68,12 +96,16 @@ class DosisCalculator extends Component
             default => 0,
         };
 
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+
         $this->calculatedDosis = [
             'dose' => round($dose, 2),
-            'max_dose' => $medication['max'],
+            'dosis_level' => $this->selectedDosisLevel,
+            'dosis_reference' => $maxDose,
+            'max_dose' => max($medication['dosis_1'], $medication['dosis_2']),
             'unit' => $medication['unit'],
             'method' => $this->getMethodDescription(),
-            'observations' => $this->getDosisObservations($dose, $medication['max']),
+            'observations' => $this->getDosisObservations($dose, $maxDose),
         ];
     }
 
@@ -84,7 +116,8 @@ class DosisCalculator extends Component
         }
 
         $dose = ($this->patient->weight * $medication['base_dose']);
-        return min($dose, $medication['max']);
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+        return min($dose, $maxDose);
     }
 
     private function calculateByAge($medication)
@@ -94,7 +127,8 @@ class DosisCalculator extends Component
         // Asumimos dosis de adulto = 500mg como estándar
         $adultDose = 500;
         $dose = ($age / ($age + 12)) * $adultDose;
-        return min($dose, $medication['max']);
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+        return min($dose, $maxDose);
     }
 
     private function calculateByBSA($medication)
@@ -108,7 +142,8 @@ class DosisCalculator extends Component
         // Dosis pediátrica por BSA = (BSA / 1.73) × dosis de adulto
         $adultDose = 500;
         $dose = ($bsa / 1.73) * $adultDose;
-        return min($dose, $medication['max']);
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+        return min($dose, $maxDose);
     }
 
     public function getAge()

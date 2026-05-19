@@ -17,6 +17,50 @@
                     </h1>
                 </div>
             </div>
+            <!-- Alertas de interacciones -->
+            @if(!empty($doseInteractions) && count($doseInteractions) > 0)
+                <div class="flex flex-col gap-4">
+                    @foreach($doseInteractions as $interaction)
+                        @php
+                            $bgColor = $interaction['severity'] === 'danger' 
+                                ? 'bg-red-100 border-red-300' 
+                                : 'bg-yellow-100 border-yellow-300';
+                            $iconColor = $interaction['severity'] === 'danger' 
+                                ? 'text-red-600' 
+                                : 'text-yellow-600';
+                            $textColor = $interaction['severity'] === 'danger' 
+                                ? 'text-red-800' 
+                                : 'text-yellow-800';
+                        @endphp
+                        <div class="rounded-[16px] border-2 {{ $bgColor }} px-4 py-4 shadow-sm">
+                            <div class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0">
+                                    <i class="fa-solid fa-exclamation-triangle {{ $iconColor }} text-[20px]"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-bold {{ $textColor }}">
+                                        ⚠️ Interacción medicamentosa detectada
+                                    </p>
+                                    <p class="mt-2 text-[13px] font-semibold {{ $textColor }} sm:text-[14px]">
+                                        <strong>{{ $interaction['medication_1'] }}</strong> + <strong>{{ $interaction['medication_2'] }}</strong>
+                                    </p>
+                                    <p class="mt-2 text-[12px] {{ $textColor }} sm:text-[13px]">
+                                        {{ $interaction['interaction_message'] }}
+                                    </p>
+                                    @if($interaction['severity'] === 'danger')
+                                        <p class="mt-2 text-[11px] font-bold text-red-700 sm:text-[12px]">
+                                            ⚠️ Esta interacción requiere precaución. Consulte con su médico.
+                                        </p>
+                                    @endif
+                                    <p class="mt-2 text-[11px] text-slate-600 sm:text-[12px]">
+                                        Hora de toma: <strong>{{ \Carbon\Carbon::parse($interaction['scheduled_at'])->format('h:i A') }}</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
             <!-- Lista de tomas -->
             @if($doses && $doses->isNotEmpty())

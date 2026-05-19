@@ -67,4 +67,5 @@
             </div>
         </main>
     </div>
+    <x-vitalia-bottom-nav active="home" />
 </div>

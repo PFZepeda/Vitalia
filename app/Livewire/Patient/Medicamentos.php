@@ -3,6 +3,7 @@
 namespace App\Livewire\Patient;
 
 use App\Models\PrescriptionDose;
+use App\Models\MedicationInteraction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -10,6 +11,7 @@ use Livewire\Component;
 class Medicamentos extends Component
 {
     public $doses;
+    public $doseInteractions = [];
     public $showTakeModal = false;
     public $showOmitModal = false;
     public $selectedDoseId = null;
@@ -222,6 +224,59 @@ class Medicamentos extends Component
             })
             ->orderBy('scheduled_at')
             ->get();
+
+        $this->detectInteractions();
+    }
+
+    private function detectInteractions(): void
+    {
+        $this->doseInteractions = [];
+
+        if ($this->doses->isEmpty()) {
+            return;
+        }
+
+        // Agrupar dosis por hora de toma para detectar conflictos
+        $dosesByTime = $this->doses->groupBy(function ($dose) {
+            return $dose->scheduled_at?->format('Y-m-d H:i') ?? 'sin-hora';
+        });
+
+        foreach ($dosesByTime as $time => $dosesAtTime) {
+            if ($dosesAtTime->count() < 2) {
+                continue;
+            }
+
+            $medicationNames = $dosesAtTime->pluck('prescription.medication.medication_name')->unique()->values();
+
+            // Verificar interacciones entre cada par de medicamentos
+            for ($i = 0; $i < count($medicationNames); $i++) {
+                for ($j = $i + 1; $j < count($medicationNames); $j++) {
+                    $med1 = $medicationNames[$i];
+                    $med2 = $medicationNames[$j];
+
+                    $interaction = MedicationInteraction::findInteraction($med1, $med2);
+
+                    if ($interaction) {
+                        $dosePair = $dosesAtTime->filter(function ($dose) use ($med1, $med2) {
+                            $medName = $dose->prescription?->medication?->medication_name;
+                            return $medName === $med1 || $medName === $med2;
+                        })->values();
+
+                        if ($dosePair->count() === 2) {
+                            $this->doseInteractions[] = [
+                                'dose_1_id' => $dosePair[0]->id,
+                                'dose_2_id' => $dosePair[1]->id,
+                                'medication_1' => $dosePair[0]->prescription?->medication?->medication_name,
+                                'medication_2' => $dosePair[1]->prescription?->medication?->medication_name,
+                                'interaction_message' => $interaction->interaction_message,
+                                'severity' => $interaction->severity,
+                                'scheduled_at' => $dosePair[0]->scheduled_at,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private function findDoseForAction($doseId): ?PrescriptionDose

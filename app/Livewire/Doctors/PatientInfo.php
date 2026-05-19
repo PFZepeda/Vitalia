@@ -47,16 +47,17 @@ class PatientInfo extends Component
     // Propiedades para cálculo de dosis
     public $calculatedDosis = null;
     public $dosisMethod = 'weight'; // weight, age, bsa
+    public $selectedDosisLevel = 1; // 1 o 2
     
     // Medicamentos disponibles con información de dosis
     public $medicationsList = [
-        'Ibuprofeno' => ['base_dose' => 10, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 400],
-        'Naproxeno' => ['base_dose' => 5, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 250],
-        'Prednisona' => ['base_dose' => 0.5, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 50],
-        'Sertralina' => ['base_dose' => 2, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 100],
-        'Tramadol' => ['base_dose' => 1, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 100],
-        'Dextrometrofano' => ['base_dose' => 0.5, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 30],
-        'Difenhidramina' => ['base_dose' => 1.25, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'max' => 50],
+        'Ibuprofeno' => ['base_dose' => 10, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 400, 'dosis_2' => 800],
+        'Naproxeno' => ['base_dose' => 5, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 250, 'dosis_2' => 500],
+        'Prednisona' => ['base_dose' => 1, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 5, 'dosis_2' => 20],
+        'Sertralina' => ['base_dose' => 1, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 50, 'dosis_2' => 100],
+        'Tramadol' => ['base_dose' => 1, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 50, 'dosis_2' => 100],
+        'Dextrometorfano' => ['base_dose' => 0.5, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 15, 'dosis_2' => 30],
+        'Difenhidramina' => ['base_dose' => 1.25, 'presentation_unit' => 'mg/kg', 'dose_unit' => 'mg', 'dosis_1' => 25, 'dosis_2' => 50],
     ];
 
     public function getFilteredMedicationsProperty()
@@ -132,13 +133,14 @@ class PatientInfo extends Component
 
     public function openMedicationModal()
     {
-        $this->reset(['selectedMedication', 'searchMedication', 'dose', 'doseUnit', 'frequencyHours', 'pillCount', 'observations', 'editItemId', 'startDate', 'endDate', 'startHour', 'startMinute', 'startTimeFormat', 'selectedDaysString', 'currentItemForDates', 'isPm']);
+        $this->reset(['selectedMedication', 'searchMedication', 'dose', 'doseUnit', 'frequencyHours', 'pillCount', 'observations', 'editItemId', 'startDate', 'endDate', 'startHour', 'startMinute', 'startTimeFormat', 'selectedDaysString', 'currentItemForDates', 'isPm', 'selectedDosisLevel']);
         $this->doseUnit = 'mg';
         $this->pillCount = 1;
         $this->startHour = 12;
         $this->startMinute = 0;
         $this->startTimeFormat = 'a.m.';
         $this->isPm = false;
+        $this->selectedDosisLevel = 1;
         $this->showMedicationModal = true;
     }
 
@@ -169,6 +171,9 @@ class PatientInfo extends Component
                 $this->isPm = $time->format('A') === 'PM';
             }
             
+            // Determinar el nivel de dosis automáticamente basado en el cálculo
+            $this->determineAutomaticDosisLevelByCalculation();
+            
             // Calcular la dosis para mostrar todos los datos
             $this->calculateDosis();
             
@@ -180,7 +185,52 @@ class PatientInfo extends Component
     {
         $this->selectedMedication = $med;
         $this->searchMedication = '';
+        // Determinar automáticamente Dosis 1 o 2 basándose en el cálculo de Clark
+        $this->determineAutomaticDosisLevelByCalculation();
         $this->calculateDosis();
+    }
+
+    private function determineAutomaticDosisLevel(): int
+    {
+        $age = $this->getAge();
+        return $age >= 12 ? 2 : 1;
+    }
+
+    private function determineAutomaticDosisLevelByCalculation(): void
+    {
+        if (!$this->selectedMedication || !isset($this->medicationsList[$this->selectedMedication])) {
+            $this->selectedDosisLevel = 1;
+            return;
+        }
+
+        $medication = $this->medicationsList[$this->selectedMedication];
+        
+        // Calcular con fórmula de Clark (peso × base_dose)
+        if (!$this->patient->weight) {
+            $this->selectedDosisLevel = $this->determineAutomaticDosisLevel();
+            return;
+        }
+
+        $calculatedDose = $this->patient->weight * $medication['base_dose'];
+        
+        // Determinar automáticamente Dosis 1 o 2 basándose en el resultado
+        // Si el cálculo <= dosis_1, usar Dosis 1
+        // Si el cálculo > dosis_1, usar Dosis 2
+        if ($calculatedDose <= $medication['dosis_1']) {
+            $this->selectedDosisLevel = 1;
+        } else {
+            $this->selectedDosisLevel = 2;
+        }
+    }
+
+    public function updatedSelectedDosisLevel()
+    {
+        if ($this->selectedMedication && isset($this->medicationsList[$this->selectedMedication])) {
+            $medication = $this->medicationsList[$this->selectedMedication];
+            // Establecer automáticamente la dosis según el nivel seleccionado
+            $this->dose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+            $this->calculateDosis();
+        }
     }
 
     public function calculateDosis()
@@ -201,20 +251,20 @@ class PatientInfo extends Component
         // Establecer automáticamente la unidad de dosis según el medicamento
         $this->doseUnit = $medication['dose_unit'];
 
-        $dose = match ($this->dosisMethod) {
-            'weight' => $this->calculateByWeight($medication),
-            'age' => $this->calculateByAge($medication),
-            'bsa' => $this->calculateByBSA($medication),
-            default => 0,
-        };
+        // Usar siempre la fórmula de Clark (weight)
+        $dose = $this->calculateByWeight($medication);
+
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
 
         $this->calculatedDosis = [
             'dose' => round($dose, 2),
-            'max_dose' => $medication['max'],
+            'dosis_level' => $this->selectedDosisLevel,
+            'dosis_reference' => $maxDose,
+            'max_dose' => max($medication['dosis_1'], $medication['dosis_2']),
             'unit' => $medication['dose_unit'],
             'presentation_unit' => $medication['presentation_unit'],
-            'method' => $this->getMethodDescription(),
-            'observations' => $this->getDosisObservations($dose, $medication['max']),
+            'method' => 'Calculada por peso (Clark)',
+            'observations' => $this->getDosisObservations($dose, $maxDose),
         ];
 
         // Establecer la dosis calculada
@@ -228,7 +278,8 @@ class PatientInfo extends Component
         }
 
         $dose = ($this->patient->weight * $medication['base_dose']);
-        return min($dose, $medication['max']);
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+        return min($dose, $maxDose);
     }
 
     private function calculateByAge($medication)
@@ -240,7 +291,8 @@ class PatientInfo extends Component
         // Fórmula de Young: (edad / edad + 12) × dosis de adulto
         $adultDose = 500;
         $dose = ($age / ($age + 12)) * $adultDose;
-        return min($dose, $medication['max']);
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+        return min($dose, $maxDose);
     }
 
     private function calculateByBSA($medication)
@@ -255,7 +307,8 @@ class PatientInfo extends Component
         // Dosis pediátrica por BSA = (BSA / 1.73) × dosis de adulto
         $adultDose = 500;
         $dose = ($bsa / 1.73) * $adultDose;
-        return min($dose, $medication['max']);
+        $maxDose = $this->selectedDosisLevel === 2 ? $medication['dosis_2'] : $medication['dosis_1'];
+        return min($dose, $maxDose);
     }
 
     private function getMethodDescription()

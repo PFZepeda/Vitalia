@@ -15,22 +15,61 @@ class MedicationBrandSeeder extends Seeder
     {
         $meds = [
             'Ibuprofeno' => [
-                ['name' => 'Advil', 'pills' => 10, 'suggested' => true],
-                ['name' => 'Tempra', 'pills' => 12, 'suggested' => false],
-                ['name' => 'Motrin', 'pills' => 20, 'suggested' => false],
+                ['name' => 'Advil', 'dose' => 400, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Motrin', 'dose' => 400, 'pills' => 12, 'suggested' => false],
+
+                ['name' => 'Motrin Retard', 'dose' => 800, 'pills' => 14, 'suggested' => true],
+                ['name' => 'Arbufentab', 'dose' => 800, 'pills' => 10, 'suggested' => false],
+
             ],
-            'Paracetamol' => [
-                ['name' => 'Tylenol', 'pills' => 10, 'suggested' => true],
-                ['name' => 'Tempra', 'pills' => 20, 'suggested' => false],
-                ['name' => 'Mejoralito', 'pills' => 15, 'suggested' => false],
+            'Naproxeno' => [
+                ['name' => 'Naprosyn', 'dose' => 250, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Flanax', 'dose' => 250, 'pills' => 12, 'suggested' => false],
+
+
+                ['name' => 'Naprosyn', 'dose' => 500, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Dolxen', 'dose' => 500, 'pills' => 20, 'suggested' => false],
             ],
-            'Amoxicilina' => [
-                ['name' => 'Amoxil', 'pills' => 12, 'suggested' => true],
-                ['name' => 'Augmentin', 'pills' => 10, 'suggested' => false],
+
+            'Prednisona' => [
+                ['name' => 'Meticorten', 'dose' => 5, 'pills' => 20, 'suggested' => true],
+                ['name' => 'Deltisona', 'dose' => 5, 'pills' => 16, 'suggested' => false],
+
+
+                ['name' => 'Meticorten', 'dose' => 20, 'pills' => 30, 'suggested' => true],
+                ['name' => 'Donsicol', 'dose' => 20, 'pills' => 30, 'suggested' => false],
             ],
-            'Metformina' => [
-                ['name' => 'Glucophage', 'pills' => 30, 'suggested' => true],
-                ['name' => 'Dimefor', 'pills' => 30, 'suggested' => false],
+            'Sertralina' => [
+                ['name' => 'Zoloft', 'dose' => 50, 'pills' => 14, 'suggested' => true],
+                ['name' => 'Altruline', 'dose' => 50, 'pills' => 12, 'suggested' => false],
+
+
+                ['name' => 'Altruline', 'dose' => 100, 'pills' => 14, 'suggested' => true],
+                ['name' => 'Serolux', 'dose' => 100, 'pills' => 12, 'suggested' => false],
+            ],
+            'Tramadol' => [
+                ['name' => 'Tramal', 'dose' => 50, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Tradol', 'dose' => 50, 'pills' => 8, 'suggested' => false],
+
+
+                ['name' => 'Tradol Retard', 'dose' => 100, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Gencatrol RTD', 'dose' => 100, 'pills' => 12, 'suggested' => false],
+            ],
+            'Dextrometrofano' => [
+                ['name' => 'Robitussin Antitusivo', 'dose' => 15, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Romilar', 'dose' => 15, 'pills' => 8, 'suggested' => false],
+
+
+                ['name' => 'Mucocalm', 'dose' => 30, 'pills' => 20, 'suggested' => true],
+                ['name' => 'Athos', 'dose' => 300, 'pills' => 16, 'suggested' => false],
+            ],
+            'Difenhidramina'=> [ 
+                ['name' => 'Benadryl', 'dose' => 25, 'pills' => 10, 'suggested' => true],
+                ['name' => 'Nytol', 'dose' => 25, 'pills' => 12, 'suggested' => false],
+
+
+                ['name' => 'Nytol', 'dose' => 50, 'pills' => 8, 'suggested' => true],
+                ['name' => 'Hidrigort', 'dose' => 50, 'pills' => 10, 'suggested' => false],
             ],
         ];
 
@@ -44,7 +83,7 @@ class MedicationBrandSeeder extends Seeder
                         'brand_name' => $brandData['name'],
                     ],
                     [
-                        'dose' => 400, // Valor genérico según tus imágenes de referencia
+                        'dose' => $brandData['dose'],
                         'dose_unit' => 'mg',
                         'pills_per_box' => $brandData['pills'],
                         'is_suggested' => $brandData['suggested'],

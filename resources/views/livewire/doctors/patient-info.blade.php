@@ -103,7 +103,8 @@
                         <div class="rounded-[16px] bg-[#f4f5f7] p-4 shadow-sm relative pr-16">
                             <h3 class="text-[14px] font-bold text-[#0b67c2] mb-1.5">
                                 {{ $prescription->medication?->medication_name ?? 'Medicamento sin asignar' }}
-                                {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}</h3>
+                                {{ $prescription->dose + 0 }} {{ $prescription->dose_unit ?? 'mg' }}
+                            </h3>
                             @if ($prescription->pill_count)
                                 <p class="text-[12px] text-slate-600 font-semibold">Pastillas: {{ $prescription->pill_count }}</p>
                             @endif
@@ -162,10 +163,10 @@
                         <div class="rounded-[16px] bg-[#f4f5f7] p-4 shadow-sm">
                             <p class="text-[13px] font-bold text-[#0b67c2] mb-1.5">
                                 {{ $prescription->created_at->format('d/m/Y') }}</p>
-                            <p class="text-[13px] text-slate-900 mb-0.5"><span
+                                <p class="text-[13px] text-slate-900 mb-1.5"><span
                                     class="font-bold text-[#0b67c2]">Medicamento:</span> <span
                                     class="text-[#f78b31] font-bold">{{ $prescription->medication?->medication_name ?? 'Medicamento sin asignar' }}
-                                    {{ $prescription->dose + 0 }} {{ $prescription->dose_unit }}</span></p>
+                                    {{ $prescription->dose + 0 }} {{ $prescription->dose_unit ?? 'mg' }}</span></p>
                             @if ($prescription->pill_count)
                                 <p class="text-[12px] text-slate-600 font-semibold">Pastillas: {{ $prescription->pill_count }}</p>
                             @endif
@@ -288,17 +289,17 @@
                                     criterio clínico para el buen uso de la dósis de médicamentos.</p>
                             </div>
 
-                            <!-- Dosis calculada con unidad automática (no editable) -->
-                            <div class="flex items-center gap-2">
-                                <input type="number" step="0.01" wire:model="dose"
-                                    class="flex-1 rounded-[12px] bg-white border border-[#0b67c2] px-3 py-2 text-[13px] text-slate-900 font-bold outline-none focus:ring-2 focus:ring-[#0b67c2]"
-                                    placeholder="0">
-
-                                <!-- Unidad (deshabilitada) -->
-                                <div
-                                    class="rounded-[12px] border border-slate-300 bg-slate-100 px-3 py-2 text-[13px] font-bold text-slate-900 min-w-fit">
-                                    {{ $doseUnit }}
-                                </div>
+                            <!-- Selector de Nivel de Dosis -->
+                            <div>
+                                <label class="mb-1 block text-[12px] font-bold text-slate-700">Nivel de Dosis <span class="text-red-500">*</span></label>
+                                <select wire:model.live="selectedDosisLevel"
+                                    class="w-full rounded-[12px] border border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-900 font-semibold outline-none focus:border-[#0b67c2] focus:ring-1 focus:ring-[#0b67c2]">
+                                    @if($selectedMedication && isset($medicationsList[$selectedMedication]))
+                                        <option value="1">Dosis 1 - {{ $medicationsList[$selectedMedication]['dosis_1'] }} mg</option>
+                                        <option value="2">Dosis 2 - {{ $medicationsList[$selectedMedication]['dosis_2'] }} mg</option>
+                                    @endif
+                                </select>
+                                <p class="text-[11px] text-slate-500 mt-1">Seleccionado automáticamente según edad. Puedes cambiar si es necesario.</p>
                             </div>
 
                             <div>

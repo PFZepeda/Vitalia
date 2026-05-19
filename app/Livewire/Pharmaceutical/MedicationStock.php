@@ -163,8 +163,10 @@ class MedicationStock extends Component
 
         $suggestedBrand = $this->item->brands()->where('is_suggested', true)->first();
         
-        // Otras patentes disponibles que no están seleccionadas
+        // Otras patentes disponibles que no están seleccionadas, filtradas por dosis y unidad
         $otherBrands = $this->item->brands()
+            ->where('dose', $this->prescription->dose)
+            ->where('dose_unit', $this->prescription->dose_unit)
             ->whereNotIn('id', array_keys($this->selectedPatents))
             ->get();
 

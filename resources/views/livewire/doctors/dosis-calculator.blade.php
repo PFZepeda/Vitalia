@@ -47,7 +47,7 @@
         </div>
 
         <!-- Selección de Medicamento y Método -->
-        <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Medicamento -->
             <div class="p-4 bg-green-50 rounded-lg border border-green-200">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Medicamento</label>
@@ -58,6 +58,18 @@
                     @endforeach
                 </select>
             </div>
+
+            <!-- Nivel de Dosis -->
+            @if($selectedMedication && isset($medications[$selectedMedication]))
+                <div class="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nivel de Dosis</label>
+                    <select wire:model.live="selectedDosisLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="1">Dosis 1 - {{ $medications[$selectedMedication]['dosis_1'] }} mg</option>
+                        <option value="2">Dosis 2 - {{ $medications[$selectedMedication]['dosis_2'] }} mg</option>
+                    </select>
+                    <p class="text-xs text-gray-600 mt-2">Seleccionado automáticamente según edad. Puedes cambiar manualmente si es necesario.</p>
+                </div>
+            @endif
 
             <!-- Método de Cálculo -->
             <div class="p-4 bg-purple-50 rounded-lg border border-purple-200">
@@ -88,11 +100,17 @@
             <div class="mb-8 p-6 bg-green-50 rounded-lg border-2 border-green-400">
                 <h2 class="text-2xl font-bold text-green-800 mb-4">Dosis Calculada</h2>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                     <div class="bg-white p-4 rounded border-l-4 border-green-500">
                         <p class="text-xs text-gray-500 uppercase mb-1">Dosis Recomendada</p>
                         <p class="text-3xl font-bold text-green-600">{{ $calculatedDosis['dose'] }}</p>
                         <p class="text-sm text-gray-600">{{ $calculatedDosis['unit'] }}</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded border-l-4 border-orange-500">
+                        <p class="text-xs text-gray-500 uppercase mb-1">Nivel Seleccionado</p>
+                        <p class="text-2xl font-bold text-orange-600">Dosis {{ $calculatedDosis['dosis_level'] }}</p>
+                        <p class="text-sm text-gray-600">{{ $calculatedDosis['dosis_reference'] }} mg máx</p>
                     </div>
 
                     <div class="bg-white p-4 rounded border-l-4 border-blue-500">

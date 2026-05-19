@@ -47,25 +47,6 @@
                                     @if($prescription->frequency_hours)
                                         <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 sm:text-[14px]">Frecuencia: Cada {{ $prescription->frequency_hours }} horas</p>
                                     @endif
-
-                                    @php
-                                        $stock = $prescription->patient->medicationStocks->where('prescription_item_id', $prescription->prescription_item_id)->first();
-                                        $currentPills = $stock->current_pills ?? 0;
-                                        // Calcular capacidad total (podría ser una caja sugerida o un valor fijo)
-                                        $suggestedBrand = $prescription->medication->brands->where('is_suggested', true)->first();
-                                        $totalCapacity = $suggestedBrand->pills_per_box ?? 10;
-                                        $percentage = min(100, max(0, ($currentPills / $totalCapacity) * 100));
-                                        $isLow = $percentage < 25;
-                                    @endphp
-                                    <div class="mt-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-[10px] font-bold text-slate-700">Disponibilidad</span>
-                                            <span class="text-[10px] font-bold {{ $isLow ? 'text-red-500' : 'text-green-600' }}">{{ $currentPills }} pastillas</span>
-                                        </div>
-                                        <div class="w-full bg-slate-300 rounded-full h-2.5 overflow-hidden">
-                                            <div class="h-full rounded-full transition-all duration-500 {{ $isLow ? 'bg-red-500' : 'bg-green-500' }}" style="width: {{ $percentage }}%"></div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="min-w-0">
@@ -101,7 +82,7 @@
                                         @if($prescription->weekdays)
                                             <div class="flex items-center gap-1">
                                                 <i class="fa-regular fa-calendar-check text-[#8ea0d7]"></i>
-                                                <span class="whitespace-nowrap">
+                                                <span class="line-clamp-2">
                                                     <span class="font-bold">Días:</span>
                                                     {{ $prescription->weekdays }}
                                                 </span>
@@ -112,6 +93,25 @@
                                     <button wire:click="openModal({{ $prescription->id }})" class="mt-3 w-full rounded-full bg-[#0b67c2] px-3 py-2 text-[11px] font-bold text-white shadow transition hover:bg-blue-700 sm:w-auto sm:px-5 sm:text-[12px]">
                                         Observaciones de receta
                                     </button>
+                                </div>
+                            </div>
+
+                            @php
+                                $stock = $prescription->patient->medicationStocks->where('prescription_item_id', $prescription->prescription_item_id)->first();
+                                $currentPills = $stock->current_pills ?? 0;
+                                // Calcular capacidad total (podría ser una caja sugerida o un valor fijo)
+                                $suggestedBrand = $prescription->medication->brands->where('is_suggested', true)->first();
+                                $totalCapacity = $suggestedBrand->pills_per_box ?? 10;
+                                $percentage = min(100, max(0, ($currentPills / $totalCapacity) * 100));
+                                $isLow = $percentage < 25;
+                            @endphp
+                            <div class="mt-4 border-slate-300">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-[10px] font-bold text-slate-700">Disponibilidad</span>
+                                    <span class="text-[10px] font-bold {{ $isLow ? 'text-red-500' : 'text-green-600' }}">{{ $currentPills }} pastillas</span>
+                                </div>
+                                <div class="w-full bg-slate-300 rounded-full h-3 overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-500 {{ $isLow ? 'bg-red-500' : 'bg-green-500' }}" style="width: {{ $percentage }}%"></div>
                                 </div>
                             </div>
                         </div>

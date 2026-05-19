@@ -229,6 +229,5 @@
         </div>
     </div>
     @endif
-    
     <x-vitalia-bottom-nav active="home" />
 </div>
