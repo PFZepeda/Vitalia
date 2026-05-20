@@ -17,6 +17,11 @@
                     </h1>
                 </div>
             </div>
+            @if($readOnly)
+                <div class="rounded-2xl bg-white px-4 py-3 text-[13px] font-semibold text-slate-600 shadow-sm sm:text-[14px]">
+                    Vista solo lectura para cuidadores.
+                </div>
+            @endif
             <!-- Alertas de interacciones -->
             @if(!empty($doseInteractions) && count($doseInteractions) > 0)
                 <div class="flex flex-col gap-4">
@@ -124,7 +129,7 @@
                                 </div>
                             </div>
 
-                            @if($canInteract)
+                            @if($canInteract && ! $readOnly)
                                 <div class="mt-6 grid grid-cols-2 gap-4">
                                     <button wire:click="openTakeModal({{ $dose->id }})"
                                         class="rounded-2xl bg-[#2f67c7] px-3 py-3 text-[13px] font-bold text-white transition hover:bg-[#2557ab] sm:text-[15px]">
@@ -144,7 +149,7 @@
         </div>
     </main>
 
-    @if($showTakeModal && $this->selectedDose)
+    @if($showTakeModal && $this->selectedDose && ! $readOnly)
         <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
             <div class="w-full max-w-sm rounded-[28px] border-4 border-[#2f67c7] bg-white p-6 shadow-2xl">
                 <h3 class="text-[20px] font-bold text-slate-950">
@@ -175,7 +180,7 @@
         </div>
     @endif
 
-    @if($showOmitModal && $this->selectedDose)
+    @if($showOmitModal && $this->selectedDose && ! $readOnly)
         <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
             <div class="w-full max-w-md rounded-[28px] border-4 border-[#2f67c7] bg-white p-6 shadow-2xl">
                 <div class="flex items-start justify-between gap-4">

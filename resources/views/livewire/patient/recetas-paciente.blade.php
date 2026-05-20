@@ -99,19 +99,26 @@
                             @php
                                 $stock = $prescription->patient->medicationStocks->where('prescription_item_id', $prescription->prescription_item_id)->first();
                                 $currentPills = $stock->current_pills ?? 0;
-                                // Calcular capacidad total (podría ser una caja sugerida o un valor fijo)
-                                $suggestedBrand = $prescription->medication->brands->where('is_suggested', true)->first();
-                                $totalCapacity = $suggestedBrand->pills_per_box ?? 10;
+                                $totalCapacity = 30;
                                 $percentage = min(100, max(0, ($currentPills / $totalCapacity) * 100));
-                                $isLow = $percentage < 25;
+                                if ($percentage >= 50) {
+                                    $barClass = 'bg-green-500';
+                                    $textClass = 'text-green-600';
+                                } elseif ($percentage >= 25) {
+                                    $barClass = 'bg-yellow-500';
+                                    $textClass = 'text-yellow-600';
+                                } else {
+                                    $barClass = 'bg-red-500';
+                                    $textClass = 'text-red-500';
+                                }
                             @endphp
                             <div class="mt-4 border-slate-300">
                                 <div class="flex justify-between items-center mb-2">
                                     <span class="text-[10px] font-bold text-slate-700">Disponibilidad</span>
-                                    <span class="text-[10px] font-bold {{ $isLow ? 'text-red-500' : 'text-green-600' }}">{{ $currentPills }} pastillas</span>
+                                    <span class="text-[10px] font-bold {{ $textClass }}">{{ $currentPills }} pastillas</span>
                                 </div>
                                 <div class="w-full bg-slate-300 rounded-full h-3 overflow-hidden">
-                                    <div class="h-full rounded-full transition-all duration-500 {{ $isLow ? 'bg-red-500' : 'bg-green-500' }}" style="width: {{ $percentage }}%"></div>
+                                    <div class="h-full rounded-full transition-all duration-500 {{ $barClass }}" style="width: {{ $percentage }}%"></div>
                                 </div>
                             </div>
                         </div>

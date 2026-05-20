@@ -36,11 +36,6 @@ class WeeklyReport extends Component
         $total = $doses->count();
         $taken = $doses->where('status', 'taken')->count();
         $missed = $doses->where('status', 'missed')->count();
-        
-        // Retrasos: tomadas más de 15 min después de lo programado
-        $delayed = $doses->where('status', 'taken')->filter(function ($dose) {
-            return $dose->taken_at && $dose->taken_at->diffInMinutes($dose->scheduled_at) > 15;
-        })->count();
 
         $reasons = [
             'Olvido' => $doses->where('miss_reason', 'Olvido')->count(),
@@ -56,8 +51,6 @@ class WeeklyReport extends Component
             'taken_percentage' => $total > 0 ? round(($taken / $total) * 100) : 0,
             'missed' => $missed,
             'missed_percentage' => $total > 0 ? round(($missed / $total) * 100) : 0,
-            'delayed' => $delayed,
-            'delayed_percentage' => $total > 0 ? round(($delayed / $total) * 100) : 0,
             'reasons' => $reasons,
             'reasons_percentages' => collect($reasons)->map(fn($val) => $missed > 0 ? round(($val / $missed) * 100) : 0),
         ];

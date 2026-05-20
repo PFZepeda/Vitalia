@@ -55,13 +55,13 @@ class MedicationBrandSeeder extends Seeder
                 ['name' => 'Tradol Retard', 'dose' => 100, 'pills' => 10, 'suggested' => true],
                 ['name' => 'Gencatrol RTD', 'dose' => 100, 'pills' => 12, 'suggested' => false],
             ],
-            'Dextrometrofano' => [
+            'Dextrometorfano' => [
                 ['name' => 'Robitussin Antitusivo', 'dose' => 15, 'pills' => 10, 'suggested' => true],
                 ['name' => 'Romilar', 'dose' => 15, 'pills' => 8, 'suggested' => false],
 
 
                 ['name' => 'Mucocalm', 'dose' => 30, 'pills' => 20, 'suggested' => true],
-                ['name' => 'Athos', 'dose' => 300, 'pills' => 16, 'suggested' => false],
+                ['name' => 'Athos', 'dose' => 30, 'pills' => 16, 'suggested' => false],
             ],
             'Difenhidramina'=> [ 
                 ['name' => 'Benadryl', 'dose' => 25, 'pills' => 10, 'suggested' => true],

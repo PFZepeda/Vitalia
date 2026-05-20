@@ -90,30 +90,6 @@
                 @endif
 
                 @if ($isCaregiver)
-                    <a href="{{ route('profile.view-patients') }}"
-                        class="flex h-full items-center gap-4 rounded-3xl bg-white px-4 py-4 shadow-[0_6px_20px_rgba(15,23,42,0.05)] transition-transform hover:scale-[1.01] sm:px-5">
-                        <div
-                            class="flex h-16 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#e2e5e9] text-[#0b67c2] sm:h-20 sm:w-24">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="h-10 w-10">
-                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
-                                <path d="M4 20C4 16.686 6.686 14 10 14H14C17.314 14 20 16.686 20 20"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="min-w-0 flex-1 text-left">
-                            <h2 class="text-[16px] font-bold text-slate-950 sm:text-[18px]">Pacientes Vinculados</h2>
-                            <p class="mt-1 text-[13px] leading-5 text-slate-400 sm:text-[15px]">Verifica el estado de
-                                los pacientes y poder ver sus estadísticas.</p>
-                        </div>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                            class="h-8 w-8 shrink-0 text-slate-950 sm:h-9 sm:w-9">
-                            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </a>
-
                     <a href="{{ route('profile.be-patient') }}"
                         class="flex h-full items-center gap-4 rounded-3xl bg-white px-4 py-4 shadow-[0_6px_20px_rgba(15,23,42,0.05)] transition-transform hover:scale-[1.01] sm:px-5">
                         <div

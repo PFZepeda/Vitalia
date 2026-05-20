@@ -23,7 +23,7 @@
                 @php
                     $medId = $prescription->prescription_item_id;
                     $stockCount = $stocks[$medId]->current_pills ?? 0;
-                    $isLowStock = $stockCount <= 3;
+                    $isLowStock = $stockCount <= 5;
                 @endphp
                 <div class="bg-[#f4f4f5] rounded-2xl p-4 sm:p-5 relative">
                     <div class="flex justify-between items-start mb-4">

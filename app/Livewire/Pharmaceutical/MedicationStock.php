@@ -25,6 +25,16 @@ class MedicationStock extends Component
     // [brand_id => ['boxes' => 0, 'pills_per_box' => X, 'name' => 'Y']]
     public $selectedPatents = [];
 
+    private function selectedPatentsSessionKey(): string
+    {
+        return 'medication_stock.selected_patents.' . $this->patient->id . '.' . $this->item->id;
+    }
+
+    private function persistSelectedPatents(): void
+    {
+        session()->put($this->selectedPatentsSessionKey(), $this->selectedPatents);
+    }
+
     public function mount(User $patient, PrescriptionItem $item)
     {
         $this->patient = $patient;
@@ -35,10 +45,21 @@ class MedicationStock extends Component
             ->where('prescription_item_id', $item->id)
             ->first();
 
-        // Inicializar con la patente sugerida si existe
-        $suggestedBrand = $this->item->brands()->where('is_suggested', true)->first();
-        if ($suggestedBrand) {
-            $this->addPatent($suggestedBrand->id);
+        $storedPatents = session()->get($this->selectedPatentsSessionKey(), []);
+        if (!empty($storedPatents)) {
+            $this->selectedPatents = $storedPatents;
+        } else {
+            // Inicializar con la patente sugerida que coincide con la dosis de la receta
+            $suggestedBrandQuery = $this->item->brands()->where('is_suggested', true);
+            if ($this->prescription) {
+                $suggestedBrandQuery
+                    ->where('dose', $this->prescription->dose)
+                    ->where('dose_unit', $this->prescription->dose_unit);
+            }
+            $suggestedBrand = $suggestedBrandQuery->first();
+            if ($suggestedBrand) {
+                $this->addPatent($suggestedBrand->id);
+            }
         }
     }
 
@@ -56,11 +77,13 @@ class MedicationStock extends Component
             ];
         }
         $this->showPatentDropdown = false;
+        $this->persistSelectedPatents();
     }
 
     public function removePatent($brandId)
     {
         unset($this->selectedPatents[$brandId]);
+        $this->persistSelectedPatents();
     }
 
     public function incrementBoxes($brandId)
@@ -68,6 +91,7 @@ class MedicationStock extends Component
         if ($this->selectedPatents[$brandId]['boxes'] < 2) {
             $this->selectedPatents[$brandId]['boxes']++;
         }
+        $this->persistSelectedPatents();
     }
 
     public function decrementBoxes($brandId)
@@ -75,6 +99,7 @@ class MedicationStock extends Component
         if ($this->selectedPatents[$brandId]['boxes'] > 0) {
             $this->selectedPatents[$brandId]['boxes']--;
         }
+        $this->persistSelectedPatents();
     }
 
     public function openModal()
@@ -147,6 +172,7 @@ class MedicationStock extends Component
             foreach ($this->selectedPatents as $id => $patent) {
                 $this->selectedPatents[$id]['boxes'] = 0;
             }
+            $this->persistSelectedPatents();
         }
     }
 
@@ -161,12 +187,22 @@ class MedicationStock extends Component
             ->where('prescription_item_id', $this->item->id)
             ->first();
 
-        $suggestedBrand = $this->item->brands()->where('is_suggested', true)->first();
+        $suggestedBrandQuery = $this->item->brands()->where('is_suggested', true);
+        if ($this->prescription) {
+            $suggestedBrandQuery
+                ->where('dose', $this->prescription->dose)
+                ->where('dose_unit', $this->prescription->dose_unit);
+        }
+        $suggestedBrand = $suggestedBrandQuery->first();
         
         // Otras patentes disponibles que no están seleccionadas, filtradas por dosis y unidad
-        $otherBrands = $this->item->brands()
-            ->where('dose', $this->prescription->dose)
-            ->where('dose_unit', $this->prescription->dose_unit)
+        $otherBrandsQuery = $this->item->brands();
+        if ($this->prescription) {
+            $otherBrandsQuery
+                ->where('dose', $this->prescription->dose)
+                ->where('dose_unit', $this->prescription->dose_unit);
+        }
+        $otherBrands = $otherBrandsQuery
             ->whereNotIn('id', array_keys($this->selectedPatents))
             ->get();
 

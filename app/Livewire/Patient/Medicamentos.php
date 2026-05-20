@@ -117,8 +117,8 @@ class Medicamentos extends Component
             $pillsToSubtract = $prescription->pill_count ?? 1;
             $stock->decrement('current_pills', $pillsToSubtract);
 
-            // Verificar si el stock bajó de 3 unidades para enviar correo
-            if ($stock->fresh()->current_pills <= 3) {
+            // Verificar si el stock bajó de 5 unidades y todavía no se avisó hoy para este medicamento
+            if ($stock->fresh()->current_pills <= 5 && ! $stock->hasLowStockAlertToday()) {
                 $patient = Auth::user();
                 $medication = $prescription->medication;
                 $currentStock = $stock->current_pills;
@@ -133,12 +133,15 @@ class Medicamentos extends Component
                     ->where('status', 'accepted')
                     ->with('caregiver')
                     ->first();
-                
+
                 if ($assignment && $assignment->caregiver) {
                     \Illuminate\Support\Facades\Mail::to($assignment->caregiver)->send(
                         new \App\Mail\LowMedicationStockAlert($patient, $medication, $currentStock)
                     );
                 }
+
+                $stock->last_low_stock_alert_at = $now;
+                $stock->save();
             }
         });
 

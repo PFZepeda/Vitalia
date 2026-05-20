@@ -45,8 +45,8 @@
             </div>
         </div>
 
-        <!-- Missed and Delayed Row -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
+        <!-- Missed Row -->
+        <div class="mb-6">
             <!-- Omisiones -->
             <div class="bg-white rounded-[24px] p-5 shadow-sm">
                 <div class="flex items-center gap-2 mb-3">
@@ -55,16 +55,6 @@
                 </div>
                 <h4 class="text-red-500 text-2xl font-extrabold mb-1">{{ $stats['missed_percentage'] }}%</h4>
                 <p class="text-slate-400 text-[12px] font-bold">{{ $stats['missed'] }} Tomas</p>
-            </div>
-
-            <!-- Retrasos -->
-            <div class="bg-white rounded-[24px] p-5 shadow-sm">
-                <div class="flex items-center gap-2 mb-3">
-                    <i class="fa-solid fa-clock-rotate-left text-slate-300 text-sm"></i>
-                    <span class="text-slate-400 text-[12px] font-bold uppercase">Retrasos</span>
-                </div>
-                <h4 class="text-slate-400 text-2xl font-extrabold mb-1">{{ $stats['delayed_percentage'] }}%</h4>
-                <p class="text-slate-400 text-[12px] font-bold">{{ $stats['delayed'] }} Toma</p>
             </div>
         </div>
 

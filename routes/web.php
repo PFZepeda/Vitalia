@@ -71,11 +71,11 @@ Route::middleware(['auth:web', 'verified', 'single_session'])->group(function ()
 			default => redirect()->route('patient.dashboard'),
 		};
 	})->name('dashboard');
-	Route::get('/patient', Dashboard::class)->middleware('role:'.RoleNames::PATIENT.',web')->name('patient.dashboard');
+	Route::get('/patient', Dashboard::class)->middleware('role:'.RoleNames::PATIENT.'|'.RoleNames::CAREGIVER.',web')->name('patient.dashboard');
 	// Ruta para recetas del paciente
-	Route::get('/patient/recetas-paciente', \App\Livewire\Patient\RecetasPaciente::class)->middleware('role:'.RoleNames::PATIENT.',web')->name('patient.recetas');
+	Route::get('/patient/recetas-paciente', \App\Livewire\Patient\RecetasPaciente::class)->middleware('role:'.RoleNames::PATIENT.'|'.RoleNames::CAREGIVER.',web')->name('patient.recetas');
 	// Ruta para medicamentos del paciente
-	Route::get('/patient/medicamentos', \App\Livewire\Patient\Medicamentos::class)->middleware('role:'.RoleNames::PATIENT.',web')->name('patient.medicamentos');
+	Route::get('/patient/medicamentos', \App\Livewire\Patient\Medicamentos::class)->middleware('role:'.RoleNames::PATIENT.'|'.RoleNames::CAREGIVER.',web')->name('patient.medicamentos');
 	Route::get('/caregiver', CaregiverDashboard::class)->middleware('role:'.RoleNames::CAREGIVER.',web')->name('caregiver.dashboard');
 	Route::get('/doctor', DoctorDashboard::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.dashboard');
 	Route::get('/doctor/patients', \App\Livewire\Doctors\PatientManagement::class)->middleware('role:'.RoleNames::DOCTOR.',web')->name('doctor.patients.index');

@@ -1,13 +1,9 @@
 <x-mail::message>
-# Alerta de Stock Bajo
+# Aviso: pocos medicamentos restantes
 
 Hola {{ $patient->name }},
 
-Te informamos que tu stock del medicamento **{{ $medication->medication_name }}** se encuentra bajo.
-
-Actualmente cuentas con solo **{{ $currentStock }}** pastillas restantes.
-
-Es importante que te pongas en contacto con tu farmacéutico para reabastecer tu medicamento lo antes posible y así evitar interrupciones en tu tratamiento.
+Tienes pocos medicamentos restantes. Por favor, abastece con tu farmacéutico.
 
 <x-mail::button :url="config('app.url')">
 Ir a Vitalia

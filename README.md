@@ -41,6 +41,35 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Low Stock Test Emails
+
+Use this command to send a test version of the low stock email:
+
+```bash
+php artisan mail:test-low-stock --user_id=1 --medication_id=2 --stock=3
+```
+
+Options:
+
+- `--user_id=1` sends the test email to one specific user.
+- `--all` sends the test email to every user that has an email address.
+- `--medication_id=2` chooses which `PrescriptionItem` appears in the email.
+- `--stock=3` changes the stock value shown in the message.
+
+Examples:
+
+```bash
+php artisan mail:test-low-stock --user_id=15
+php artisan mail:test-low-stock --user_id=15 --medication_id=8 --stock=2
+php artisan mail:test-low-stock --all --medication_id=8 --stock=4
+```
+
+If you want to verify the automatic daily alerts, the scheduled command is:
+
+```bash
+php artisan medications:low-stock-alerts
+```
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

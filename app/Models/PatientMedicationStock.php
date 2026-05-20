@@ -13,6 +13,11 @@ class PatientMedicationStock extends Model
         'patient_id',
         'prescription_item_id',
         'current_pills',
+        'last_low_stock_alert_at',
+    ];
+
+    protected $casts = [
+        'last_low_stock_alert_at' => 'datetime',
     ];
 
     public function patient(): BelongsTo
@@ -23,5 +28,10 @@ class PatientMedicationStock extends Model
     public function prescriptionItem(): BelongsTo
     {
         return $this->belongsTo(PrescriptionItem::class);
+    }
+
+    public function hasLowStockAlertToday(): bool
+    {
+        return (bool) ($this->last_low_stock_alert_at?->isToday());
     }
 }
