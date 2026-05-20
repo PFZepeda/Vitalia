@@ -18,6 +18,7 @@ class Medicamentos extends Component
     public $actionTime = null;
     public $omissionReason = '';
     public $omissionOther = '';
+    public $readOnly = false;
 
     public function mount(): void
     {
@@ -200,6 +201,7 @@ class Medicamentos extends Component
 
         // Si es cuidador, ver las dosis del paciente asignado
         if ($user && $user->hasRole(\App\Support\RoleNames::CAREGIVER)) {
+            $this->readOnly = true;
             $assignment = \App\Models\CaregiverRequest::where('caregiver_id', $userId)
                 ->where('status', 'accepted')
                 ->first();
